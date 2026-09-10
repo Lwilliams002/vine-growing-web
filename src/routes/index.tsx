@@ -4,7 +4,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
 import heroImg from "@/assets/hero-pastor.png.asset.json";
-import vineImg from "@/assets/vine-stone.jpg";
+import churchBuildingImg from "@/assets/church-building.png.asset.json";
+import worshipInsideImg from "@/assets/worship-inside.jpg.asset.json";
 import sermonImg from "@/assets/sermon-still.jpg";
 
 const TITLE = "The Vine Apostolic Church | Houston, TX";
@@ -133,14 +134,22 @@ function Home() {
       </section>
 
       {/* About */}
-      <section className="mx-auto grid max-w-6xl gap-24 px-6 py-32 md:grid-cols-2 md:items-center">
-        <div className="relative">
-          <div className="pointer-events-none absolute -left-12 -top-12 select-none font-display text-[12rem] leading-none text-foreground/5">
+      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-32 md:grid-cols-2 md:items-center md:gap-24">
+        <div className="relative grid gap-4 md:grid-cols-2">
+          <div className="pointer-events-none absolute -left-6 -top-12 select-none font-display text-[10rem] leading-none text-foreground/5 md:-left-12">
             VINE
           </div>
           <img
-            src={vineImg}
-            alt="Vine growing across a stone wall"
+            src={churchBuildingImg.url}
+            alt="The Vine Apostolic Church building exterior in Houston"
+            width={800}
+            height={1000}
+            loading="lazy"
+            className="aspect-[4/5] w-full object-cover ring-1 ring-border"
+          />
+          <img
+            src={worshipInsideImg.url}
+            alt="Congregation worshipping inside The Vine Apostolic Church"
             width={800}
             height={1000}
             loading="lazy"
