@@ -58,8 +58,8 @@ function Home() {
             src={heroImg.url}
             alt="Pastor smiling while preaching at The Vine Apostolic Church pulpit"
             width={1920}
-            height={1088}
-            className="animate-zoom size-full object-cover object-[center_25%]"
+            height={1280}
+            className="animate-zoom size-full object-cover object-[70%_center]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         </div>
