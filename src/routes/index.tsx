@@ -6,7 +6,7 @@ import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
 import heroImg from "@/assets/hero-pastor.png.asset.json";
 import churchBuildingImg from "@/assets/church-building.png.asset.json";
 import worshipInsideImg from "@/assets/worship-inside.jpg.asset.json";
-import sermonImg from "@/assets/sermon-still.jpg";
+import sermonVideo from "@/assets/sermon-video.mp4.asset.json";
 
 const TITLE = "The Vine Apostolic Church | Houston, TX";
 const DESCRIPTION =
@@ -248,55 +248,17 @@ function Home() {
             </Link>
           </div>
           <div className="relative flex min-h-[400px] items-center justify-center bg-card p-1">
-            <img
-              src={sermonImg}
-              alt="Pastor preaching into a microphone"
-              width={800}
-              height={600}
-              loading="lazy"
+            <video
+              src={sermonVideo.url}
+              controls
+              playsInline
+              preload="metadata"
               className="size-full object-cover"
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex size-20 items-center justify-center rounded-full border border-primary bg-primary/20 backdrop-blur-sm">
-                <div className="ml-2 size-0 border-y-[10px] border-l-[16px] border-y-transparent border-l-foreground" />
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Facebook Reel */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Síguenos / Follow Us
-          </p>
-          <h2 className="mb-8 font-display text-4xl uppercase leading-[0.9] md:text-5xl">
-            Únete a <span className="text-primary">Nuestra Familia</span>
-          </h2>
-          <div className="mx-auto aspect-[267/476] w-full max-w-[320px] overflow-hidden rounded-2xl bg-card ring-1 ring-border">
-            <iframe
-              src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2055280448536382%2F&show_text=false&width=267&t=0"
-              width="267"
-              height="476"
-              style={{ border: "none", overflow: "hidden", width: "100%", height: "100%" }}
-              scrolling="no"
-              frameBorder="0"
-              allowFullScreen
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-              title="The Vine Apostolic Church Facebook Reel"
-            />
-          </div>
-          <a
-            href={CHURCH.facebook}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-8 inline-block rounded-xl border border-border px-8 py-4 font-mono text-xs uppercase tracking-widest transition-all hover:bg-foreground hover:text-background"
-          >
-            Ver Más en Facebook / More on Facebook
-          </a>
-        </div>
-      </section>
 
       <SiteFooter />
     </>
