@@ -4,7 +4,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
 import heroImg from "@/assets/hero-pastor.png.asset.json";
-import vineImg from "@/assets/vine-stone.jpg";
+import churchBuildingImg from "@/assets/church-building.png.asset.json";
+import worshipInsideImg from "@/assets/worship-inside.jpg.asset.json";
 import sermonImg from "@/assets/sermon-still.jpg";
 
 const TITLE = "The Vine Apostolic Church | Houston, TX";
