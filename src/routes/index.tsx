@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
-import heroImg from "@/assets/hero-worship.jpg";
+import heroImg from "@/assets/hero-pastor.png.asset.json";
 import vineImg from "@/assets/vine-stone.jpg";
 import sermonImg from "@/assets/sermon-still.jpg";
 
@@ -55,8 +55,8 @@ function Home() {
       <section className="relative flex h-[90vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src={heroImg}
-            alt="Pastor preaching under blue stage lighting at The Vine Apostolic Church"
+            src={heroImg.url}
+            alt="Pastor preaching at The Vine Apostolic Church with worship team under blue stage lighting"
             width={1920}
             height={1088}
             className="animate-zoom size-full object-cover"
