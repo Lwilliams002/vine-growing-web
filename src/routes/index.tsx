@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
-import heroImg from "@/assets/hero-worship.jpg";
+import heroImg from "@/assets/hero-pastor.png.asset.json";
 import vineImg from "@/assets/vine-stone.jpg";
 import sermonImg from "@/assets/sermon-still.jpg";
 
