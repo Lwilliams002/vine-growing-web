@@ -56,7 +56,7 @@ function Home() {
         <div className="absolute inset-0 z-0">
           <img
             src={heroImg.url}
-            alt="Pastor preaching at The Vine Apostolic Church with worship team under blue stage lighting"
+            alt="Pastor smiling while preaching at The Vine Apostolic Church pulpit"
             width={1920}
             height={1088}
             className="animate-zoom size-full object-cover"
