@@ -134,49 +134,60 @@ function Home() {
       </section>
 
       {/* About */}
-      <section className="mx-auto grid max-w-6xl gap-12 px-6 py-32 md:grid-cols-2 md:items-center md:gap-24">
-        <div className="relative grid gap-4 md:grid-cols-2">
-          <div className="pointer-events-none absolute -left-6 -top-12 select-none font-display text-[10rem] leading-none text-foreground/5 md:-left-12">
-            VINE
+      <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16 lg:gap-24">
+          {/* Images */}
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5">
+            <div className="overflow-hidden rounded-2xl md:rounded-3xl">
+              <img
+                src={worshipInsideImg.url}
+                alt="Congregation worshipping inside The Vine Apostolic Church"
+                width={800}
+                height={600}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover md:aspect-[3/4]"
+              />
+            </div>
+            <div className="mx-auto w-3/4 overflow-hidden rounded-2xl md:mx-0 md:w-full md:rounded-3xl">
+              <img
+                src={churchBuildingImg.url}
+                alt="The Vine Apostolic Church building exterior in Houston"
+                width={800}
+                height={600}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover md:aspect-[3/4]"
+              />
+            </div>
           </div>
-          <img
-            src={churchBuildingImg.url}
-            alt="The Vine Apostolic Church building exterior in Houston"
-            width={800}
-            height={1000}
-            loading="lazy"
-            className="aspect-[4/5] w-full object-cover ring-1 ring-border"
-          />
-          <img
-            src={worshipInsideImg.url}
-            alt="Congregation worshipping inside The Vine Apostolic Church"
-            width={800}
-            height={1000}
-            loading="lazy"
-            className="aspect-[4/5] w-full object-cover ring-1 ring-border"
-          />
-        </div>
-        <div>
-          <h2 className="mb-8 font-display text-5xl uppercase leading-none">
-            Nuestra <span className="text-primary">Identidad</span>
-          </h2>
-          <div className="space-y-6 leading-relaxed text-foreground/70">
-            <p className="text-lg">
-              Somos una comunidad apasionada por la presencia de Dios, arraigada en la
-              verdad Apostólica y comprometida con la transformación de nuestra ciudad
-              en Houston.
+
+          {/* Text */}
+          <div className="md:pl-4 lg:pl-8">
+            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              Our Identity
             </p>
-            <p className="font-mono text-sm italic">
-              We are a community passionate about God&apos;s presence, rooted in
-              Apostolic truth, and committed to transforming our city of Houston.
-            </p>
-            <div className="pt-8">
-              <Link
-                to="/about"
-                className="inline-block border border-border px-8 py-4 font-mono text-xs uppercase tracking-widest transition-all hover:bg-foreground hover:text-background"
-              >
-                Conoce Más / Learn More
-              </Link>
+            <h2 className="mb-8 font-display text-5xl uppercase leading-[0.9] md:text-6xl lg:text-7xl">
+              Nuestra <span className="text-primary">Identidad</span>
+            </h2>
+            <div className="space-y-6">
+              <p className="text-lg leading-relaxed text-foreground/80">
+                Somos una comunidad apasionada por la presencia de Dios, arraigada en la
+                verdad Apostólica y comprometida con la transformación de nuestra ciudad
+                en Houston.
+              </p>
+              <div className="border-l border-primary/30 pl-4">
+                <p className="font-mono text-sm italic leading-relaxed text-muted-foreground">
+                  We are a community passionate about God&apos;s presence, rooted in
+                  Apostolic truth, and committed to transforming our city of Houston.
+                </p>
+              </div>
+              <div className="pt-4">
+                <Link
+                  to="/about"
+                  className="inline-block w-full rounded-xl border border-border px-8 py-4 text-center font-mono text-xs uppercase tracking-widest transition-all hover:bg-foreground hover:text-background md:w-auto"
+                >
+                  Conoce Más / Learn More
+                </Link>
+              </div>
             </div>
           </div>
         </div>
