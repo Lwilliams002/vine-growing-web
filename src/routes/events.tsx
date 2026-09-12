@@ -6,6 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { AnnouncementList } from "@/components/site/Announcements";
 import { CHURCH, SERVICES, SITE_URL } from "@/lib/church";
 import { fetchPublicAnnouncements } from "@/lib/announcements";
+import { useAnnouncements } from "@/lib/use-announcements";
 
 const TITLE = "Events & Service Times | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/events")({
 });
 
 function Events() {
-  const announcements = Route.useLoaderData();
+  const announcements = useAnnouncements(Route.useLoaderData());
 
   return (
     <>

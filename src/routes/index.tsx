@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES, SITE_URL } from "@/lib/church";
 import { fetchPublicAnnouncements } from "@/lib/announcements";
+import { useAnnouncements } from "@/lib/use-announcements";
 import { AnnouncementList } from "@/components/site/Announcements";
 import heroImg from "@/assets/hero-pastor.jpg";
 import churchBuildingImg from "@/assets/church-building.jpg";
@@ -80,7 +81,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const announcements = Route.useLoaderData();
+  const announcements = useAnnouncements(Route.useLoaderData(), 3);
 
   return (
     <>

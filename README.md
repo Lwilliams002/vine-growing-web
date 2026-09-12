@@ -50,3 +50,21 @@ something without deleting it, and the pin to keep it at the top.
    Set the same two variables wherever the site is built (Lovable / Cloudflare).
 
 Both values are safe to expose in the browser; the SQL policies decide what the anon key can do.
+
+## Test link on GitHub Pages
+
+Every push to `main` also publishes a static copy of the site to GitHub Pages via
+`.github/workflows/pages.yml`, at `https://lwilliams002.github.io/vine-growing-web/`.
+This is a preview for testing; the real deployment stays on Lovable / Cloudflare.
+
+One-time setup in the GitHub repo:
+
+1. **Settings -> Pages -> Build and deployment -> Source:** choose **GitHub Actions**.
+2. **Settings -> Secrets and variables -> Actions -> New repository secret**, add:
+   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (from Lovable Cloud, or the
+     Supabase dashboard under Project Settings -> API).
+3. Push to `main` (or run the workflow from the Actions tab). The first run takes a couple of
+   minutes; the link is shown on the workflow's deploy step.
+
+Locally the same export is produced with `GITHUB_PAGES_BASE=/vine-growing-web/ bun run build`
+and lands in `.output/public`.

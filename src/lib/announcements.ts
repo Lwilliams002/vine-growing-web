@@ -28,22 +28,28 @@ function todayIso(): string {
  * Never throws; a misconfigured or unreachable backend just yields [].
  */
 export async function fetchPublicAnnouncements(limit = 50): Promise<Announcement[]> {
-  const sb = getSupabase();
-  if (!sb) return [];
-  const { data, error } = await sb
-    .from(TABLE)
-    .select("*")
-    .eq("is_published", true)
-    .or(`event_date.is.null,event_date.gte.${todayIso()}`)
-    .order("is_pinned", { ascending: false })
-    .order("event_date", { ascending: true, nullsFirst: false })
-    .order("created_at", { ascending: false })
-    .limit(limit);
-  if (error) {
-    console.error("Failed to load announcements", error);
+  try {
+    const sb = getSupabase();
+    if (!sb) return [];
+    const { data, error } = await sb
+      .from(TABLE)
+      .select("*")
+      .eq("is_published", true)
+      .or(`event_date.is.null,event_date.gte.${todayIso()}`)
+      .order("is_pinned", { ascending: false })
+      .order("event_date", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error) {
+      console.error("Failed to load announcements", error);
+      return [];
+    }
+    return (data ?? []) as Announcement[];
+  } catch (err) {
+    // Missing backend config or network failure must never break the public site.
+    console.error("Announcements unavailable", err);
     return [];
   }
-  return (data ?? []) as Announcement[];
 }
 
 /** Every announcement, for the admin screen. Requires a signed-in session. */
