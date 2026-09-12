@@ -2,15 +2,41 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { CHURCH, MINISTRIES, SERVICES } from "@/lib/church";
-import heroImg from "@/assets/hero-pastor.png.asset.json";
-import churchBuildingImg from "@/assets/church-building.png.asset.json";
-import worshipInsideImg from "@/assets/worship-inside.jpg.asset.json";
-import sermonVideo from "@/assets/sermon-video.mp4.asset.json";
+import { CHURCH, MINISTRIES, SERVICES, SITE_URL } from "@/lib/church";
+import { fetchPublicAnnouncements } from "@/lib/announcements";
+import { AnnouncementList } from "@/components/site/Announcements";
+import heroImg from "@/assets/hero-pastor.jpg";
+import churchBuildingImg from "@/assets/church-building.jpg";
+import worshipInsideImg from "@/assets/worship-inside.jpg";
+import sermonVideo from "@/assets/sermon-video.mp4";
+import galleryWide from "@/assets/sanctuary-wide.jpg";
+import galleryBaptism from "@/assets/baptism.jpg";
+import galleryKids from "@/assets/kids-worship.jpg";
+import galleryPrayer from "@/assets/prayer-hands.jpg";
+import galleryWorship from "@/assets/worship-woman-hands.jpg";
+import galleryCongregation from "@/assets/congregation-worship.jpg";
+import ministryYouth from "@/assets/hands-raised-wide.jpg";
+import ministryLadies from "@/assets/worship-singers.jpg";
+import ministryKids from "@/assets/kids-group.jpg";
+
+const MINISTRY_IMAGES = {
+  "01": ministryYouth,
+  "02": ministryLadies,
+  "03": ministryKids,
+} as const;
+
+const GALLERY = [
+  { src: galleryWide, alt: "Sunday worship service at The Vine Apostolic Church" },
+  { src: galleryWorship, alt: "Woman worshipping with hands raised" },
+  { src: galleryBaptism, alt: "Baptism in the name of Jesus" },
+  { src: galleryKids, alt: "Children worshipping during service" },
+  { src: galleryPrayer, alt: "Family praying together" },
+  { src: galleryCongregation, alt: "Congregation worshipping together on a Sunday" },
+] as const;
 
 const TITLE = "The Vine Apostolic Church | Houston, TX";
 const DESCRIPTION =
-  "Apostolic church in north Houston. Sunday worship 10:00 AM, Wednesday Bible study 7:30 PM at 14615 Aldine Westfield Rd. Bilingual services — servicios bilingües.";
+  "Apostolic church in north Houston. Sunday worship 9:00 AM in English and 11:30 AM en Español, Wednesday prayer night 7:30 PM, at 14615 Aldine Westfield Rd. Bilingual services — servicios bilingües.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,9 +46,9 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: `${SITE_URL}/` },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
     scripts: [
       {
         type: "application/ld+json",
@@ -30,6 +56,8 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Church",
           name: CHURCH.name,
+          url: SITE_URL,
+          image: `${SITE_URL}/og-image.jpg`,
           address: {
             "@type": "PostalAddress",
             streetAddress: CHURCH.address,
@@ -44,10 +72,16 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  // Up to three current announcements for the home page. Cached briefly so
+  // back/forward navigation doesn't refetch on every visit.
+  loader: () => fetchPublicAnnouncements(3),
+  staleTime: 60_000,
   component: Home,
 });
 
 function Home() {
+  const announcements = Route.useLoaderData();
+
   return (
     <>
       <SiteHeader />
@@ -56,7 +90,7 @@ function Home() {
       <section className="relative flex h-[90vh] items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src={heroImg.url}
+            src={heroImg}
             alt="Pastor smiling while preaching at The Vine Apostolic Church pulpit"
             width={1920}
             height={1280}
@@ -133,6 +167,26 @@ function Home() {
         </div>
       </section>
 
+      {/* Announcements (managed by the pastor at /admin) */}
+      {announcements.length > 0 ? (
+        <section className="px-6 pt-32">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
+              <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
+                Anuncios
+              </h2>
+              <Link
+                to="/events"
+                className="eyebrow mb-3 text-muted-foreground transition-colors hover:text-primary"
+              >
+                Ver todos / See all →
+              </Link>
+            </div>
+            <AnnouncementList items={announcements} />
+          </div>
+        </section>
+      ) : null}
+
       {/* About */}
       <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16 lg:gap-24">
@@ -140,7 +194,7 @@ function Home() {
           <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5">
             <div className="overflow-hidden rounded-2xl md:rounded-3xl">
               <img
-                src={worshipInsideImg.url}
+                src={worshipInsideImg}
                 alt="Congregation worshipping inside The Vine Apostolic Church"
                 width={800}
                 height={600}
@@ -150,7 +204,7 @@ function Home() {
             </div>
             <div className="mx-auto w-3/4 overflow-hidden rounded-2xl md:mx-0 md:w-full md:rounded-3xl">
               <img
-                src={churchBuildingImg.url}
+                src={churchBuildingImg}
                 alt="The Vine Apostolic Church building exterior in Houston"
                 width={800}
                 height={600}
@@ -170,14 +224,13 @@ function Home() {
             </h2>
             <div className="space-y-6">
               <p className="text-lg leading-relaxed text-foreground/80">
-                Somos una comunidad apasionada por la presencia de Dios, arraigada en la
-                verdad Apostólica y comprometida con la transformación de nuestra ciudad
-                en Houston.
+                Somos una comunidad apasionada por la presencia de Dios, arraigada en la verdad
+                Apostólica y comprometida con la transformación de nuestra ciudad en Houston.
               </p>
               <div className="border-l border-primary/30 pl-4">
                 <p className="font-mono text-sm italic leading-relaxed text-muted-foreground">
-                  We are a community passionate about God&apos;s presence, rooted in
-                  Apostolic truth, and committed to transforming our city of Houston.
+                  We are a community passionate about God&apos;s presence, rooted in Apostolic
+                  truth, and committed to transforming our city of Houston.
                 </p>
               </div>
               <div className="pt-4">
@@ -196,31 +249,67 @@ function Home() {
       {/* Ministries */}
       <section className="bg-card px-6 py-32">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-16 flex items-end justify-between">
-            <h2 className="font-display text-6xl uppercase tracking-tighter">
-              Ministerios
-            </h2>
-            <span className="eyebrow mb-4 text-muted-foreground">
-              Groups &amp; Ministries
-            </span>
+          <div className="mb-16 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="font-display text-6xl uppercase tracking-tighter">Ministerios</h2>
+            <span className="eyebrow mb-4 text-muted-foreground">Groups &amp; Ministries</span>
           </div>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-3">
             {MINISTRIES.map((m) => (
               <Link
                 key={m.number}
                 to="/ministries"
-                className="group flex aspect-square flex-col justify-between border border-border bg-background p-8 transition-colors hover:bg-primary/5"
+                hash={m.slug}
+                className="group relative flex aspect-[4/5] flex-col justify-between overflow-hidden border border-border bg-background p-8 md:aspect-[3/4]"
               >
-                <span className="font-mono text-xs text-primary">{m.number}</span>
-                <div>
-                  <h3 className="mb-2 font-display text-3xl uppercase transition-colors group-hover:text-primary">
+                <img
+                  src={MINISTRY_IMAGES[m.number]}
+                  alt=""
+                  width={1200}
+                  height={1600}
+                  loading="lazy"
+                  className="absolute inset-0 size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/10 transition-opacity duration-500 group-hover:via-background/40" />
+                <div className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-primary transition-transform duration-500 ease-out-expo group-hover:scale-x-100" />
+
+                <span className="relative z-10 inline-flex size-10 items-center justify-center bg-primary font-mono text-xs font-bold text-primary-foreground">
+                  {m.number}
+                </span>
+                <div className="relative z-10">
+                  <h3 className="mb-2 text-balance font-display text-4xl uppercase leading-none transition-colors group-hover:text-primary md:text-3xl lg:text-4xl">
                     {m.title}
                   </h3>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                  <p className="text-xs uppercase tracking-widest text-foreground/70">
                     {m.subtitle}
                   </p>
+                  <span className="mt-5 inline-block whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-primary opacity-0 transition-all duration-500 group-hover:opacity-100">
+                    Conoce más / Learn more →
+                  </span>
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery */}
+      <section className="px-6 py-32">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="font-display text-6xl uppercase tracking-tighter">Vida en La Vid</h2>
+            <span className="eyebrow mb-4 text-muted-foreground">Life at The Vine</span>
+          </div>
+          <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
+            {GALLERY.map((img) => (
+              <img
+                key={img.alt}
+                src={img.src}
+                alt={img.alt}
+                width={1200}
+                height={1600}
+                loading="lazy"
+                className="aspect-[4/5] w-full object-cover"
+              />
             ))}
           </div>
         </div>
@@ -237,8 +326,8 @@ function Home() {
               El Poder del Espíritu Santo
             </h2>
             <p className="mb-10 font-mono text-sm italic text-foreground/60">
-              &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de
-              amor y de dominio propio.&rdquo;
+              &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de
+              dominio propio.&rdquo;
             </p>
             <Link
               to="/sermons"
@@ -249,7 +338,7 @@ function Home() {
           </div>
           <div className="relative flex min-h-[400px] items-center justify-center bg-card p-1">
             <video
-              src={sermonVideo.url}
+              src={sermonVideo}
               controls
               playsInline
               preload="metadata"
@@ -259,6 +348,26 @@ function Home() {
         </div>
       </section>
 
+      {/* Prayer CTA */}
+      <section className="bg-primary px-6 py-20 text-primary-foreground">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div>
+            <span className="eyebrow mb-4 block opacity-70">Oración / Prayer</span>
+            <h2 className="text-balance font-display text-4xl uppercase leading-none md:text-6xl">
+              ¿Necesitas oración?
+            </h2>
+            <p className="mt-4 max-w-xl font-mono text-sm italic opacity-80">
+              Need prayer? Send us your request and our pastoral team will pray for you this week.
+            </p>
+          </div>
+          <Link
+            to="/prayer"
+            className="inline-block bg-primary-foreground px-10 py-5 font-display uppercase tracking-widest text-primary transition-colors hover:bg-foreground hover:text-background"
+          >
+            Enviar Petición / Send a Request
+          </Link>
+        </div>
+      </section>
 
       <SiteFooter />
     </>

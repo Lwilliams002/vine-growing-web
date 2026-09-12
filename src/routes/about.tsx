@@ -3,7 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
-import vineImg from "@/assets/vine-stone.jpg";
+import { SITE_URL } from "@/lib/church";
+import baptismImg from "@/assets/baptism.jpg";
+import congregationImg from "@/assets/congregation-worship.jpg";
+import handsRaisedImg from "@/assets/hands-raised-man.jpg";
+import pastorPrayerImg from "@/assets/pastor-suit.jpg";
 
 const TITLE = "About Us | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -17,9 +21,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: `${SITE_URL}/about` },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/about` }],
   }),
   component: About,
 });
@@ -59,8 +63,8 @@ function About() {
 
       <section className="mx-auto grid max-w-6xl gap-20 px-6 py-24 md:grid-cols-2 md:items-center">
         <img
-          src={vineImg}
-          alt="Vine growing across a stone wall"
+          src={baptismImg}
+          alt="Pastor baptizing a new believer at The Vine Apostolic Church"
           width={800}
           height={1000}
           loading="lazy"
@@ -71,22 +75,43 @@ function About() {
             Nuestra <span className="text-primary">Historia</span>
           </h2>
           <p>
-            Nacimos del deseo de ver familias restauradas por el poder del evangelio.
-            Cada domingo nos reunimos en Aldine Westfield Road para adorar, escuchar la
-            Palabra y orar los unos por los otros.
+            Nacimos del deseo de ver familias restauradas por el poder del evangelio. Cada domingo
+            nos reunimos en Aldine Westfield Road para adorar, escuchar la Palabra y orar los unos
+            por los otros.
           </p>
           <p className="font-mono text-sm italic">
-            We gather every week on Aldine Westfield Road to worship, hear the Word, and
-            pray for one another. Guests are family from the first handshake.
+            We gather every week on Aldine Westfield Road to worship, hear the Word, and pray for
+            one another. Guests are family from the first handshake.
           </p>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-24">
+        <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          Nuestra Familia / Our Family
+        </p>
+        <div className="grid grid-cols-1 gap-1 md:grid-cols-3">
+          {[
+            { src: congregationImg, alt: "Congregation worshipping together on a Sunday" },
+            { src: handsRaisedImg, alt: "Congregation worshipping with hands raised" },
+            { src: pastorPrayerImg, alt: "Pastor praying with the congregation" },
+          ].map((img) => (
+            <img
+              key={img.alt}
+              src={img.src}
+              alt={img.alt}
+              width={1200}
+              height={1600}
+              loading="lazy"
+              className="aspect-[4/5] w-full object-cover ring-1 ring-border"
+            />
+          ))}
         </div>
       </section>
 
       <section className="bg-card px-6 py-24">
         <div className="mx-auto max-w-6xl">
-          <h2 className="mb-16 font-display text-5xl uppercase tracking-tighter">
-            Lo Que Creemos
-          </h2>
+          <h2 className="mb-16 font-display text-5xl uppercase tracking-tighter">Lo Que Creemos</h2>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
             {BELIEFS.map((b) => (
               <div key={b.number} className="border border-border bg-background p-10">

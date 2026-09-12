@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/vine-logo.png.asset.json";
+import logo from "@/assets/vine-logo.png";
 import { CHURCH } from "@/lib/church";
 
 const LINKS = [
   { to: "/giving", label: "Give" },
   { to: "/ministries", label: "Ministries" },
   { to: "/events", label: "Events" },
+  { to: "/prayer", label: "Prayer" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -16,7 +17,7 @@ export function SiteFooter() {
         <div className="flex flex-col items-start justify-between gap-20 border-b border-border pb-20 md:flex-row">
           <div className="max-w-xs">
             <img
-              src={logo.url}
+              src={logo}
               alt={`${CHURCH.name} logo`}
               width={64}
               height={64}
@@ -72,14 +73,22 @@ export function SiteFooter() {
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             © {new Date().getFullYear()} {CHURCH.name}. All rights reserved.
           </p>
-          <a
-            href={CHURCH.facebook}
-            target="_blank"
-            rel="noreferrer"
-            className="flex size-8 items-center justify-center rounded-full border border-border font-mono text-[10px] text-muted-foreground transition-all hover:border-primary hover:text-primary"
-          >
-            FB
-          </a>
+          <div className="flex items-center gap-6">
+            <Link
+              to="/admin"
+              className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60 transition-colors hover:text-primary"
+            >
+              Admin
+            </Link>
+            <a
+              href={CHURCH.facebook}
+              target="_blank"
+              rel="noreferrer"
+              className="flex size-8 items-center justify-center rounded-full border border-border font-mono text-[10px] text-muted-foreground transition-all hover:border-primary hover:text-primary"
+            >
+              FB
+            </a>
+          </div>
         </div>
       </div>
     </footer>

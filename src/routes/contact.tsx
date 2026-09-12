@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
-import { CHURCH, SERVICES } from "@/lib/church";
+import { CHURCH, SERVICES, SITE_URL } from "@/lib/church";
 
 const TITLE = "Visit & Contact | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -17,9 +17,9 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: `${SITE_URL}/contact` },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/contact` }],
   }),
   component: Contact,
 });
@@ -66,6 +66,16 @@ function Contact() {
           <p className="mt-4 font-mono text-xs uppercase tracking-widest text-muted-foreground">
             También respondemos por Facebook
           </p>
+          <h2 className="mb-6 mt-16 font-display text-3xl uppercase">Oración</h2>
+          <p className="text-sm text-foreground/60">
+            ¿Necesitas oración? Envíanos tu petición y oramos por ti.
+          </p>
+          <Link
+            to="/prayer"
+            className="mt-4 inline-block border border-primary px-6 py-3 font-mono text-xs uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+          >
+            Petición de Oración / Prayer Request
+          </Link>
           <a
             href={CHURCH.facebook}
             target="_blank"

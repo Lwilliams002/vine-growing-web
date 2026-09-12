@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
-import { CHURCH } from "@/lib/church";
+import { CHURCH, SITE_URL } from "@/lib/church";
 
 const TITLE = "Giving | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -17,9 +17,9 @@ export const Route = createFileRoute("/giving")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/giving" },
+      { property: "og:url", content: `${SITE_URL}/giving` },
     ],
-    links: [{ rel: "canonical", href: "/giving" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/giving` }],
   }),
   component: Giving,
 });
@@ -37,8 +37,10 @@ const WAYS = [
   },
   {
     number: "03",
-    title: "En Línea",
-    body: "Estamos habilitando las ofrendas en línea. Escríbenos y te enviamos el enlace.",
+    title: "En Línea / Online",
+    body: "Da de forma segura en línea con tarjeta o cuenta bancaria. Give securely online, anytime.",
+    href: CHURCH.givingUrl,
+    cta: "Donar en Línea / Give Online",
   },
 ];
 
@@ -59,13 +61,23 @@ function Giving() {
               <span className="font-mono text-xs text-primary">{w.number}</span>
               <h2 className="mb-3 mt-10 font-display text-2xl uppercase">{w.title}</h2>
               <p className="text-sm leading-relaxed text-foreground/60">{w.body}</p>
+              {"href" in w ? (
+                <a
+                  href={w.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-8 inline-block bg-primary px-8 py-3 font-display text-sm uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
+                >
+                  {w.cta}
+                </a>
+              ) : null}
             </div>
           ))}
         </div>
 
         <blockquote className="mx-auto mt-24 max-w-2xl text-center font-mono text-sm italic text-foreground/60">
-          &ldquo;Cada uno dé como propuso en su corazón: no con tristeza, ni por
-          necesidad, porque Dios ama al dador alegre.&rdquo;
+          &ldquo;Cada uno dé como propuso en su corazón: no con tristeza, ni por necesidad, porque
+          Dios ama al dador alegre.&rdquo;
           <span className="mt-4 block not-italic uppercase tracking-widest text-primary">
             2 Corintios 9:7
           </span>

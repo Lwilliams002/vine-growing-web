@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE_URL } from "../lib/church";
 
 function NotFoundComponent() {
   return (
@@ -81,11 +82,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Apostolic church in north Houston at 14615 Aldine Westfield Rd. Sunday 10:00 AM, Wednesday 7:30 PM.",
+          "Apostolic church in north Houston at 14615 Aldine Westfield Rd. Sundays 9:00 AM (English) and 11:30 AM (Español), Wednesday prayer 7:30 PM.",
       },
       { property: "og:site_name", content: "The Vine Apostolic Church" },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "es_US" },
+      { property: "og:image", content: `${SITE_URL}/og-image.jpg` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_URL}/og-image.jpg` },
+      { name: "theme-color", content: "#0f1117" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
-import { CHURCH } from "@/lib/church";
-import sermonImg from "@/assets/sermon-still.jpg";
+import { CHURCH, SITE_URL } from "@/lib/church";
+import sermonImg from "@/assets/pastor-stage.jpg";
 
 const TITLE = "Sermons & Media | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -18,9 +18,9 @@ export const Route = createFileRoute("/sermons")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/sermons" },
+      { property: "og:url", content: `${SITE_URL}/sermons` },
     ],
-    links: [{ rel: "canonical", href: "/sermons" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/sermons` }],
   }),
   component: Sermons,
 });
@@ -32,7 +32,7 @@ const SERMONS = [
     date: "Domingo / Sunday",
   },
   { title: "Permanece en la Vid", verse: "Juan 15:5", date: "Domingo / Sunday" },
-  { title: "Fe Que No Se Rinde", verse: "Hebreos 11:1", date: "Miércoles / Wednesday" },
+  { title: "Fe Que No Se Rinde", verse: "Hebreos 11:1", date: "Domingo / Sunday" },
 ];
 
 function Sermons() {
@@ -55,8 +55,8 @@ function Sermons() {
               El Poder del Espíritu Santo
             </h2>
             <p className="mb-10 font-mono text-sm italic text-foreground/60">
-              &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de
-              amor y de dominio propio.&rdquo;
+              &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de
+              dominio propio.&rdquo;
             </p>
             <a
               href={CHURCH.facebook}
@@ -69,11 +69,11 @@ function Sermons() {
           </div>
           <img
             src={sermonImg}
-            alt="Pastor preaching into a microphone"
-            width={800}
-            height={600}
+            alt="Pastor preaching from the stage at The Vine Apostolic Church"
+            width={1200}
+            height={1600}
             loading="lazy"
-            className="size-full min-h-[360px] object-cover"
+            className="size-full min-h-[360px] object-cover object-top"
           />
         </div>
 
