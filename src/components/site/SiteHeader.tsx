@@ -10,6 +10,7 @@ const NAV = [
   { to: "/about", label: "Nosotros" },
   { to: "/ministries", label: "Ministries" },
   { to: "/sermons", label: "Sermons" },
+  { to: "/live", label: "En Vivo" },
   { to: "/events", label: "Events" },
   { to: "/prayer", label: "Oración" },
   { to: "/contact", label: "Contact" },

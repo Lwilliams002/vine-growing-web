@@ -5,6 +5,9 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { CHURCH, MINISTRIES, SERVICES, SITE_URL } from "@/lib/church";
 import { fetchPublicAnnouncements } from "@/lib/announcements";
 import { useAnnouncements } from "@/lib/use-announcements";
+import { fetchSettings, isFacebookVideoUrl } from "@/lib/settings";
+import { useSettings } from "@/lib/use-settings";
+import { FacebookVideo } from "@/components/site/FacebookVideo";
 import { AnnouncementList } from "@/components/site/Announcements";
 import heroImg from "@/assets/hero-pastor.jpg";
 import churchBuildingImg from "@/assets/church-building.jpg";
@@ -75,17 +78,43 @@ export const Route = createFileRoute("/")({
   }),
   // Up to three current announcements for the home page. Cached briefly so
   // back/forward navigation doesn't refetch on every visit.
-  loader: () => fetchPublicAnnouncements(3),
+  loader: async () => {
+    const [announcements, settings] = await Promise.all([
+      fetchPublicAnnouncements(3),
+      fetchSettings(),
+    ]);
+    return { announcements, settings };
+  },
   staleTime: 60_000,
   component: Home,
 });
 
 function Home() {
-  const announcements = useAnnouncements(Route.useLoaderData(), 3);
+  const data = Route.useLoaderData();
+  const announcements = useAnnouncements(data.announcements, 3);
+  const settings = useSettings(data.settings);
+  const isLive = settings.is_live && isFacebookVideoUrl(settings.live_video_url);
+  const sermonUrl = isFacebookVideoUrl(settings.latest_sermon_url)
+    ? settings.latest_sermon_url
+    : "";
 
   return (
     <>
       <SiteHeader />
+
+      {/* Live banner (toggled from /admin) */}
+      {isLive ? (
+        <Link
+          to="/live"
+          className="flex items-center justify-center gap-4 bg-destructive px-6 py-3 font-mono text-[11px] uppercase tracking-[0.3em] text-white transition-colors hover:bg-foreground hover:text-background"
+        >
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
+            <span className="relative inline-flex size-2 rounded-full bg-white" />
+          </span>
+          Estamos en vivo ahora — ver / We are live now — watch →
+        </Link>
+      ) : null}
 
       {/* Hero */}
       <section className="relative flex h-[90vh] items-center justify-center overflow-hidden">
@@ -324,27 +353,43 @@ function Home() {
               Última Palabra / Latest Word
             </span>
             <h2 className="mb-8 text-balance font-display text-5xl uppercase leading-none md:text-6xl">
-              El Poder del Espíritu Santo
+              {settings.latest_sermon_title || "El Poder del Espíritu Santo"}
             </h2>
             <p className="mb-10 font-mono text-sm italic text-foreground/60">
               &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de
               dominio propio.&rdquo;
             </p>
-            <Link
-              to="/sermons"
-              className="inline-block bg-primary px-10 py-4 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
-            >
-              Ver Mensaje / Watch Now
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/sermons"
+                className="inline-block bg-primary px-10 py-4 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
+              >
+                Ver Mensaje / Watch Now
+              </Link>
+              <Link
+                to="/live"
+                className="inline-block border border-border px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
+              >
+                En Vivo / Live
+              </Link>
+            </div>
           </div>
           <div className="relative flex min-h-[400px] items-center justify-center bg-card p-1">
-            <video
-              src={sermonVideo}
-              controls
-              playsInline
-              preload="metadata"
-              className="size-full object-cover"
-            />
+            {sermonUrl ? (
+              <FacebookVideo
+                url={sermonUrl}
+                title={settings.latest_sermon_title || "Último mensaje"}
+                className="self-center"
+              />
+            ) : (
+              <video
+                src={sermonVideo}
+                controls
+                playsInline
+                preload="metadata"
+                className="size-full object-cover"
+              />
+            )}
           </div>
         </div>
       </section>

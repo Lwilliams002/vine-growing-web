@@ -6,6 +6,7 @@ const LINKS = [
   { to: "/giving", label: "Give" },
   { to: "/ministries", label: "Ministries" },
   { to: "/events", label: "Events" },
+  { to: "/live", label: "Live" },
   { to: "/prayer", label: "Prayer" },
   { to: "/contact", label: "Contact" },
 ] as const;

@@ -68,3 +68,19 @@ One-time setup in the GitHub repo:
 
 Locally the same export is produced with `GITHUB_PAGES_BASE=/vine-growing-web/ bun run build`
 and lands in `.output/public`.
+
+## Live stream (pastor admin)
+
+The **En Vivo / Live** card at the top of `/admin` controls the live player on the site:
+
+1. Start the live video on the Facebook page as usual.
+2. Open the live post on Facebook, copy its link (it looks like
+   `https://www.facebook.com/thevinehouston/videos/1234567890`), paste it into
+   **Enlace del video en vivo**, tick **Estamos en vivo ahora**, and save.
+   The home page shows a red "Estamos en vivo" bar and `/live` plays the stream inside the site.
+3. When the service ends, untick the box, paste the same link into **Último mensaje**, give it a
+   title, and save. That video then plays on Home, Mensajes, and En Vivo until the next service.
+
+Facebook only allows embedding a specific video link, not "whatever is live right now", which is
+why step 2 is needed each time. This needs the `site_settings` block from `supabase/schema.sql`
+to have been run once in the Supabase SQL editor.
