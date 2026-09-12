@@ -60,8 +60,22 @@ export function SiteFooter() {
                 {CHURCH.city}
                 <br />
                 <a
+                  href={`tel:${CHURCH.phone}`}
+                  className="mt-6 block font-mono text-[10px] tracking-normal text-primary"
+                >
+                  {CHURCH.phoneDisplay}
+                </a>
+                <a
+                  href={`https://wa.me/${CHURCH.whatsapp}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 block font-mono text-[10px] tracking-normal text-primary"
+                >
+                  WhatsApp
+                </a>
+                <a
                   href={`mailto:${CHURCH.email}`}
-                  className="mt-6 block font-mono text-[10px] lowercase tracking-normal text-primary"
+                  className="mt-2 block font-mono text-[10px] lowercase tracking-normal text-primary"
                 >
                   {CHURCH.email}
                 </a>

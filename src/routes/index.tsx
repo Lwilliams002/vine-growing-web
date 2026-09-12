@@ -9,6 +9,8 @@ import { fetchSettings, isFacebookVideoUrl } from "@/lib/settings";
 import { useSettings } from "@/lib/use-settings";
 import { FacebookVideo } from "@/components/site/FacebookVideo";
 import { AnnouncementList } from "@/components/site/Announcements";
+import { PlanYourVisit } from "@/components/site/PlanYourVisit";
+import { NewsletterSignup } from "@/components/site/NewsletterSignup";
 import heroImg from "@/assets/hero-pastor.jpg";
 import churchBuildingImg from "@/assets/church-building.jpg";
 import worshipInsideImg from "@/assets/worship-inside.jpg";
@@ -217,6 +219,9 @@ function Home() {
         </section>
       ) : null}
 
+      {/* First-time visitors */}
+      <PlanYourVisit compact />
+
       {/* About */}
       <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16 lg:gap-24">
@@ -393,6 +398,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Email signup */}
+      <NewsletterSignup />
 
       {/* Prayer CTA */}
       <section className="bg-primary px-6 py-20 text-primary-foreground">

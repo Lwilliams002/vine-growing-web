@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
+import { PlanYourVisit } from "@/components/site/PlanYourVisit";
 import { CHURCH, SERVICES, SITE_URL } from "@/lib/church";
 
 const TITLE = "Visit & Contact | The Vine Apostolic Church Houston";
@@ -55,6 +56,24 @@ function Contact() {
               Get Directions
             </span>
           </a>
+
+          <h2 className="mb-6 mt-16 font-display text-3xl uppercase">Llámanos</h2>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={`tel:${CHURCH.phone}`}
+              className="inline-block bg-primary px-6 py-3 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
+            >
+              {CHURCH.phoneDisplay}
+            </a>
+            <a
+              href={`https://wa.me/${CHURCH.whatsapp}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block border border-primary px-6 py-3 font-mono text-xs uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            >
+              WhatsApp
+            </a>
+          </div>
 
           <h2 className="mb-6 mt-16 font-display text-3xl uppercase">Escríbenos</h2>
           <a
@@ -112,6 +131,8 @@ function Contact() {
           </div>
         </div>
       </section>
+
+      <PlanYourVisit />
 
       <SiteFooter />
     </>

@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import { CHURCH } from "@/lib/church";
 
 /**
@@ -41,30 +43,58 @@ export function FacebookVideo({
   );
 }
 
-/** Fallback when no video URL is configured: the page's Facebook timeline. */
+/**
+ * Fallback when no video URL is configured: the page's Facebook timeline.
+ * Facebook's page plugin needs an explicit pixel width (180 to 500), so we
+ * measure the container and rebuild the embed when it resizes; otherwise the
+ * feed overflows on phones.
+ */
 export function FacebookPageFeed({ className = "" }: { className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setWidth(Math.max(180, Math.min(500, Math.floor(el.clientWidth))));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const height = 640;
   const src =
-    "https://www.facebook.com/plugins/page.php?" +
-    new URLSearchParams({
-      href: CHURCH.facebook,
-      tabs: "timeline",
-      width: "500",
-      height: "700",
-      small_header: "true",
-      adapt_container_width: "true",
-      hide_cover: "false",
-      show_facepile: "false",
-    }).toString();
+    width === null
+      ? null
+      : "https://www.facebook.com/plugins/page.php?" +
+        new URLSearchParams({
+          href: CHURCH.facebook,
+          tabs: "timeline",
+          width: String(width),
+          height: String(height),
+          small_header: "true",
+          adapt_container_width: "true",
+          hide_cover: "false",
+          show_facepile: "false",
+        }).toString();
 
   return (
-    <div className={`w-full overflow-hidden bg-black ${className}`}>
-      <iframe
-        title="The Vine on Facebook"
-        src={src}
-        className="h-[700px] w-full border-0"
-        loading="lazy"
-        allow="encrypted-media"
-      />
+    <div ref={ref} className={`flex w-full justify-center overflow-hidden bg-card ${className}`}>
+      {src ? (
+        <iframe
+          key={src}
+          title="The Vine on Facebook"
+          src={src}
+          width={width ?? undefined}
+          height={height}
+          className="max-w-full border-0"
+          loading="lazy"
+          allow="encrypted-media"
+        />
+      ) : (
+        <div style={{ height }} />
+      )}
     </div>
   );
 }

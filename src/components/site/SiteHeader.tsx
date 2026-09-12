@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Menu, MessageCircle, Phone } from "lucide-react";
 
 import logo from "@/assets/vine-logo.png";
 import { CHURCH } from "@/lib/church";
@@ -46,6 +46,13 @@ export function SiteHeader() {
       </div>
 
       <div className="flex items-center gap-3">
+        <a
+          href={`tel:${CHURCH.phone}`}
+          className="hidden items-center gap-2 font-mono text-xs tracking-widest text-muted-foreground transition-colors hover:text-primary lg:flex"
+          aria-label={`Llamar / Call ${CHURCH.phoneDisplay}`}
+        >
+          <Phone className="size-3.5" /> {CHURCH.phoneDisplay}
+        </a>
         <Link
           to="/giving"
           className="bg-foreground px-5 py-2 font-display text-xs uppercase tracking-widest text-background transition-colors hover:bg-primary hover:text-primary-foreground"
@@ -88,10 +95,28 @@ export function SiteHeader() {
                 </Link>
               </li>
             </ul>
-            <p className="mt-12 font-mono text-[10px] uppercase leading-loose tracking-widest text-muted-foreground">
+            <div className="mt-10 grid grid-cols-2 gap-2">
+              <a
+                href={`tel:${CHURCH.phone}`}
+                className="inline-flex items-center justify-center gap-2 border border-border px-4 py-3 font-mono text-[10px] uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
+              >
+                <Phone className="size-3.5" /> Llamar
+              </a>
+              <a
+                href={`https://wa.me/${CHURCH.whatsapp}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-border px-4 py-3 font-mono text-[10px] uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
+              >
+                <MessageCircle className="size-3.5" /> WhatsApp
+              </a>
+            </div>
+            <p className="mt-8 font-mono text-[10px] uppercase leading-loose tracking-widest text-muted-foreground">
               {CHURCH.address}
               <br />
               {CHURCH.city}
+              <br />
+              {CHURCH.phoneDisplay}
             </p>
           </SheetContent>
         </Sheet>

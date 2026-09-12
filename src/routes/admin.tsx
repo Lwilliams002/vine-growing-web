@@ -24,6 +24,7 @@ import {
 } from "@/lib/announcements";
 import { eventDateParts } from "@/components/site/Announcements";
 import { LiveSettings } from "@/components/admin/LiveSettings";
+import { Subscribers } from "@/components/admin/Subscribers";
 import logo from "@/assets/vine-logo.png";
 
 export const Route = createFileRoute("/admin")({
@@ -258,6 +259,7 @@ function Dashboard() {
       </div>
 
       <LiveSettings />
+      <Subscribers />
 
       {showForm ? (
         <AnnouncementEditor

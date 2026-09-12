@@ -10,6 +10,11 @@ export const CHURCH = {
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=14615+Aldine+Westfield+Rd+Houston+TX+77039",
   email: "info@thevinehouston.org",
+  // TODO: replace with the church's real number. 555-01xx numbers are reserved
+  // placeholders and will not connect.
+  phoneDisplay: "(713) 555-0100",
+  phone: "+17135550100", // tel: link, E.164
+  whatsapp: "17135550100", // wa.me link, digits only
   facebook: "https://www.facebook.com/thevinehouston/",
   givingUrl: "https://app.securegive.com/thevinehouston",
   // Web3Forms access key for the prayer request form. Web3Forms only accepts

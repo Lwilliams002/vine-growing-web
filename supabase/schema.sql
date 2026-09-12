@@ -35,3 +35,32 @@ insert into public.site_settings (key, value) values
   ('latest_sermon_url', ''),
   ('latest_sermon_title', '')
 on conflict (key) do nothing;
+
+-- ---------------------------------------------------------------------------
+-- Email subscribers from the "Recibe los anuncios" box on the home page.
+-- Anyone can add themselves; only signed-in admins can see the list.
+
+create table if not exists public.subscribers (
+  id         uuid primary key default gen_random_uuid(),
+  email      text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table public.subscribers enable row level security;
+
+drop policy if exists "Anyone can subscribe" on public.subscribers;
+create policy "Anyone can subscribe"
+  on public.subscribers for insert
+  with check (true);
+
+drop policy if exists "Signed-in users can read subscribers" on public.subscribers;
+create policy "Signed-in users can read subscribers"
+  on public.subscribers for select
+  to authenticated
+  using (true);
+
+drop policy if exists "Signed-in users can delete subscribers" on public.subscribers;
+create policy "Signed-in users can delete subscribers"
+  on public.subscribers for delete
+  to authenticated
+  using (true);
