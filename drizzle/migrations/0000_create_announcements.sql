@@ -1,23 +1,25 @@
--- Announcements for The Vine website.
--- Run this once in the Supabase dashboard: SQL Editor -> New query -> paste -> Run.
-
 create table if not exists public.announcements (
   id           uuid primary key default gen_random_uuid(),
   title        text not null,
   body         text not null,
-  event_date   date,            -- optional: when the event happens (hidden once it has passed)
-  event_time   text,            -- optional free text, e.g. "7:30 PM"
-  link_url     text,            -- optional: Facebook post, registration form, etc.
-  link_label   text,            -- optional: text for the link button
+  event_date   date,
+  event_time   text,
+  link_url     text,
+  link_label   text,
   is_pinned    boolean not null default false,
   is_published boolean not null default true,
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
 
--- Keep updated_at fresh on edits.
+grant select on public.announcements to anon;
+grant select, insert, update, delete on public.announcements to authenticated;
+grant all on public.announcements to service_role;
+
 create or replace function public.set_updated_at()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql
+set search_path = public
+as $$
 begin
   new.updated_at = now();
   return new;
@@ -28,8 +30,6 @@ create trigger announcements_set_updated_at
   before update on public.announcements
   for each row execute function public.set_updated_at();
 
--- Row Level Security: anyone can read published announcements,
--- only signed-in users (the pastor / admins) can create, edit, or delete.
 alter table public.announcements enable row level security;
 
 drop policy if exists "Public can read published announcements" on public.announcements;
