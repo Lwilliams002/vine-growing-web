@@ -227,9 +227,6 @@ function Home() {
         </section>
       ) : null}
 
-      {/* First-time visitors */}
-      <PlanYourVisit compact />
-
       {/* About */}
       <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16 lg:gap-24">
@@ -285,6 +282,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* First-time visitors */}
+      <PlanYourVisit compact />
 
       {/* Ministries */}
       <section className="bg-card px-6 py-32">
