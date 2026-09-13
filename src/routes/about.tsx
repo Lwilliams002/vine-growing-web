@@ -3,16 +3,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
+import { Beliefs } from "@/components/site/Beliefs";
 import { SITE_URL } from "@/lib/church";
-import { useLang, type Bilingual } from "@/lib/i18n";
+import { useLang } from "@/lib/i18n";
 import baptismImg from "@/assets/baptism.jpg";
 import congregationImg from "@/assets/congregation-worship.jpg";
 import handsRaisedImg from "@/assets/hands-raised-man.jpg";
 import pastorPrayerImg from "@/assets/pastor-suit.jpg";
 
-const TITLE = "About Us | The Vine Apostolic Church Houston";
+const TITLE = "About Us & What We Believe | The Vine Apostolic Church Houston";
 const DESCRIPTION =
-  "Who we are: an Apostolic, Spirit-filled, bilingual congregation in north Houston rooted in the doctrine of the apostles.";
+  "Who we are and what we believe: an Apostolic, Spirit-filled, bilingual congregation in north Houston, part of the Apostolic Assembly of the Faith in Christ Jesus.";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -28,41 +29,6 @@ export const Route = createFileRoute("/about")({
   }),
   component: About,
 });
-
-const BELIEFS: { number: string; title: Bilingual; body: Bilingual }[] = [
-  {
-    number: "01",
-    title: { es: "La Palabra", en: "The Word" },
-    body: {
-      es: "Creemos que la Biblia es la Palabra inspirada de Dios, nuestra única regla de fe y conducta.",
-      en: "We believe the Bible is the inspired Word of God, our only rule of faith and conduct.",
-    },
-  },
-  {
-    number: "02",
-    title: { es: "Un Solo Dios", en: "One God" },
-    body: {
-      es: "Creemos en un solo Dios, manifestado en Jesucristo, en quien habita corporalmente toda la plenitud de la Deidad.",
-      en: "We believe in one God, revealed in Jesus Christ, in whom all the fullness of the Godhead dwells bodily.",
-    },
-  },
-  {
-    number: "03",
-    title: { es: "Nuevo Nacimiento", en: "New Birth" },
-    body: {
-      es: "Arrepentimiento, bautismo en el nombre de Jesucristo y la llenura del Espíritu Santo.",
-      en: "Repentance, baptism in the name of Jesus Christ, and the infilling of the Holy Spirit.",
-    },
-  },
-  {
-    number: "04",
-    title: { es: "Vida Santa", en: "Holy Living" },
-    body: {
-      es: "Una vida transformada, dedicada a la oración, a la comunión y al servicio a nuestra ciudad.",
-      en: "A transformed life devoted to prayer, fellowship, and serving our city.",
-    },
-  },
-];
 
 function About() {
   const { t } = useLang();
@@ -107,6 +73,12 @@ function About() {
               "Guests are family from the first handshake.",
             )}
           </p>
+          <a
+            href="#creemos"
+            className="inline-block border border-border px-6 py-3 font-mono text-xs uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
+          >
+            {t("Lo que creemos ↓", "What we believe ↓")}
+          </a>
         </div>
       </section>
 
@@ -133,22 +105,7 @@ function About() {
         </div>
       </section>
 
-      <section className="bg-card px-6 py-24">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="mb-16 font-display text-5xl uppercase tracking-tighter">
-            {t("Lo Que Creemos", "What We Believe")}
-          </h2>
-          <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
-            {BELIEFS.map((b) => (
-              <div key={b.number} className="border border-border bg-background p-10">
-                <span className="font-mono text-xs text-primary">{b.number}</span>
-                <h3 className="mb-3 mt-6 font-display text-2xl uppercase">{t(b.title)}</h3>
-                <p className="text-sm leading-relaxed text-foreground/60">{t(b.body)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Beliefs />
 
       <SiteFooter />
     </>
