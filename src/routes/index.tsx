@@ -9,7 +9,7 @@ import { fetchSettings, isFacebookVideoUrl } from "@/lib/settings";
 import { useSettings } from "@/lib/use-settings";
 import { FacebookVideo } from "@/components/site/FacebookVideo";
 import { useLang } from "@/lib/i18n";
-import { AnnouncementList } from "@/components/site/Announcements";
+import { AnnouncementCard } from "@/components/site/Announcements";
 import { PlanYourVisit } from "@/components/site/PlanYourVisit";
 import { NewsletterSignup } from "@/components/site/NewsletterSignup";
 import heroImg from "@/assets/hero-pastor.jpg";
@@ -83,7 +83,7 @@ export const Route = createFileRoute("/")({
   // back/forward navigation doesn't refetch on every visit.
   loader: async () => {
     const [announcements, settings] = await Promise.all([
-      fetchPublicAnnouncements(3),
+      fetchPublicAnnouncements(1),
       fetchSettings(),
     ]);
     return { announcements, settings };
@@ -94,7 +94,8 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const data = Route.useLoaderData();
-  const announcements = useAnnouncements(data.announcements, 3);
+  const announcements = useAnnouncements(data.announcements, 1);
+  const nextAnnouncement = announcements[0];
   const settings = useSettings(data.settings);
   const { t } = useLang();
   const isLive = settings.is_live && isFacebookVideoUrl(settings.live_video_url);
@@ -208,12 +209,12 @@ function Home() {
       </section>
 
       {/* Announcements (managed by the pastor at /admin) */}
-      {announcements.length > 0 ? (
+      {nextAnnouncement ? (
         <section className="px-6 pt-32">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
               <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
-                {t("Anuncios", "Announcements")}
+                {t("Próximo Anuncio", "Next Up")}
               </h2>
               <Link
                 to="/events"
@@ -222,7 +223,7 @@ function Home() {
                 {t("Ver todos →", "See all →")}
               </Link>
             </div>
-            <AnnouncementList items={announcements} />
+            <AnnouncementCard a={nextAnnouncement} />
           </div>
         </section>
       ) : null}
