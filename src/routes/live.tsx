@@ -6,6 +6,7 @@ import { FacebookPageFeed, FacebookVideo } from "@/components/site/FacebookVideo
 import { CHURCH, SERVICES, SITE_URL } from "@/lib/church";
 import { fetchSettings, isFacebookVideoUrl } from "@/lib/settings";
 import { useSettings } from "@/lib/use-settings";
+import { useLang } from "@/lib/i18n";
 
 const TITLE = "En Vivo / Live Stream | The Vine Apostolic Church Houston";
 const DESCRIPTION =
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/live")({
 
 function Live() {
   const settings = useSettings(Route.useLoaderData());
+  const { t } = useLang();
   const liveUrl =
     settings.is_live && isFacebookVideoUrl(settings.live_video_url) ? settings.live_video_url : "";
   const replayUrl = isFacebookVideoUrl(settings.latest_sermon_url)
@@ -49,18 +51,24 @@ function Live() {
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-white" />
               </span>
-              En vivo ahora / Live now
+              {t("En vivo ahora", "Live now")}
             </span>
           ) : (
-            <span className="eyebrow mb-6 block text-primary">En Vivo / Live</span>
+            <span className="eyebrow mb-6 block text-primary">{t("En Vivo", "Live")}</span>
           )}
           <h1 className="font-display text-6xl uppercase leading-[0.9] tracking-tighter md:text-8xl">
-            {liveUrl ? "Estamos en vivo" : "Servicio en vivo"}
+            {liveUrl ? t("Estamos en vivo", "We're live") : t("Servicio en vivo", "Live service")}
           </h1>
           <p className="mt-6 max-w-2xl text-pretty text-lg text-foreground/70">
             {liveUrl
-              ? "Bienvenido. Acompáñanos desde donde estés. / Welcome, join us from wherever you are."
-              : "Transmitimos cada servicio en vivo. Mientras tanto, mira el mensaje más reciente. / We stream every service live. Until then, watch the latest message."}
+              ? t(
+                  "Bienvenido. Acompáñanos desde donde estés.",
+                  "Welcome. Join us from wherever you are.",
+                )
+              : t(
+                  "Transmitimos cada servicio en vivo. Mientras tanto, mira el mensaje más reciente.",
+                  "We stream every service live. Until then, watch the latest message.",
+                )}
           </p>
         </div>
       </section>
@@ -69,17 +77,25 @@ function Live() {
         {videoUrl ? (
           <FacebookVideo
             url={videoUrl}
-            title={liveUrl ? "Servicio en vivo" : settings.latest_sermon_title || "Último mensaje"}
+            title={
+              liveUrl
+                ? t("Servicio en vivo", "Live service")
+                : settings.latest_sermon_title || t("Último mensaje", "Latest message")
+            }
             autoplay={Boolean(liveUrl)}
             className="ring-1 ring-border"
           />
         ) : (
           <div className="grid gap-1 md:grid-cols-2">
             <div className="border border-border bg-card p-10">
-              <h2 className="font-display text-3xl uppercase">Próximo servicio</h2>
+              <h2 className="font-display text-3xl uppercase">
+                {t("Próximo servicio", "Next service")}
+              </h2>
               <p className="mt-3 text-sm text-foreground/60">
-                Aún no hay video configurado. Síguenos en Facebook para la transmisión. / No video
-                set up yet; follow us on Facebook for the stream.
+                {t(
+                  "Aún no hay video configurado. Síguenos en Facebook para la transmisión.",
+                  "No video is set up yet. Follow us on Facebook for the stream.",
+                )}
               </p>
             </div>
             <FacebookPageFeed className="ring-1 ring-border" />
@@ -93,15 +109,15 @@ function Live() {
         <div className="mt-16 grid gap-12 md:grid-cols-[1fr_auto] md:items-start">
           <div>
             <h2 className="mb-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-              Horarios de transmisión / Stream schedule
+              {t("Horarios de transmisión", "Stream schedule")}
             </h2>
             <div className="divide-y divide-border border-y border-border">
               {SERVICES.map((s) => (
-                <div key={`${s.day}-${s.time}`} className="flex items-end justify-between py-5">
+                <div key={`${s.day.es}-${s.time}`} className="flex items-end justify-between py-5">
                   <div>
-                    <span className="font-display text-2xl uppercase">{s.day}</span>
+                    <span className="font-display text-2xl uppercase">{t(s.day)}</span>
                     <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">
-                      {s.detail}
+                      {t(s.detail)}
                     </p>
                   </div>
                   <span className="font-mono text-primary">{s.time}</span>
@@ -116,13 +132,13 @@ function Live() {
               rel="noreferrer"
               className="inline-block bg-primary px-8 py-4 text-center font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
             >
-              Ver en Facebook
+              {t("Ver en Facebook", "Watch on Facebook")}
             </a>
             <Link
               to="/prayer"
               className="inline-block border border-border px-8 py-4 text-center font-mono text-xs uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
             >
-              Pedir oración / Request prayer
+              {t("Pedir oración", "Request prayer")}
             </Link>
           </div>
         </div>

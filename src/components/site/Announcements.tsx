@@ -1,6 +1,7 @@
 import { Pin } from "lucide-react";
 
 import type { Announcement } from "@/lib/announcements";
+import { useLang } from "@/lib/i18n";
 
 const MONTHS_ES = [
   "ene",
@@ -30,6 +31,7 @@ export function eventDateParts(iso: string): { day: string; month: string; weekd
 }
 
 export function AnnouncementCard({ a }: { a: Announcement }) {
+  const { t } = useLang();
   const date = a.event_date ? eventDateParts(a.event_date) : null;
 
   return (
@@ -47,7 +49,7 @@ export function AnnouncementCard({ a }: { a: Announcement }) {
           </>
         ) : (
           <span className="font-mono text-[10px] uppercase leading-tight tracking-widest text-primary">
-            Aviso
+            {t("Aviso", "Notice")}
           </span>
         )}
       </div>
@@ -56,7 +58,7 @@ export function AnnouncementCard({ a }: { a: Announcement }) {
         <div className="flex items-start justify-between gap-4">
           <h3 className="text-balance font-display text-2xl uppercase leading-none">{a.title}</h3>
           {a.is_pinned ? (
-            <Pin className="size-4 shrink-0 text-primary" aria-label="Fijado / Pinned" />
+            <Pin className="size-4 shrink-0 text-primary" aria-label={t("Fijado", "Pinned")} />
           ) : null}
         </div>
         {a.event_time ? (
@@ -74,7 +76,7 @@ export function AnnouncementCard({ a }: { a: Announcement }) {
             rel="noreferrer"
             className="mt-4 inline-block font-mono text-xs uppercase tracking-widest text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
           >
-            {a.link_label || "Más información / Learn more"} →
+            {a.link_label || t("Más información", "Learn more")} →
           </a>
         ) : null}
       </div>

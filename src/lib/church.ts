@@ -1,3 +1,5 @@
+import type { Bilingual } from "./i18n";
+
 // Public origin of the deployed site (no trailing slash). Used for canonical
 // URLs, Open Graph tags, and the sitemap. Update this when the domain is final.
 export const SITE_URL = "https://thevinehouston.org";
@@ -23,81 +25,116 @@ export const CHURCH = {
   web3formsKey: "5a7f6ee7-fdf1-4ad8-a83e-97bf603137a6",
 } as const;
 
-export const SERVICES = [
-  {
-    day: "Sunday / Domingo",
-    time: "9:00 AM",
-    detail: "English Service",
-  },
-  {
-    day: "Domingo / Sunday",
-    time: "11:30 AM",
-    detail: "Servicio en Español",
-  },
-  {
-    day: "Miércoles / Wednesday",
-    time: "7:30 PM",
-    detail: "Noche de Oración / Prayer Night",
-  },
-] as const;
+export type Service = { day: Bilingual; time: string; detail: Bilingual };
 
-export const MINISTRIES = [
+export const SERVICES: readonly Service[] = [
+  {
+    day: { es: "Domingo", en: "Sunday" },
+    time: "9:00 AM",
+    detail: { es: "Servicio en inglés", en: "English service" },
+  },
+  {
+    day: { es: "Domingo", en: "Sunday" },
+    time: "11:30 AM",
+    detail: { es: "Servicio en español", en: "Spanish service" },
+  },
+  {
+    day: { es: "Miércoles", en: "Wednesday" },
+    time: "7:30 PM",
+    detail: { es: "Noche de oración", en: "Prayer night" },
+  },
+];
+
+export type Ministry = {
+  number: "01" | "02" | "03";
+  slug: string;
+  title: Bilingual;
+  subtitle: string;
+  body: Bilingual;
+  audience: Bilingual;
+  highlights: Bilingual[];
+};
+
+export const MINISTRIES: readonly Ministry[] = [
   {
     number: "01",
     slug: "jovenes",
-    title: "Jóvenes / Youth",
+    title: { es: "Jóvenes", en: "Youth" },
     subtitle: "The Vine Youth Collective",
-    body: "Un espacio para que la próxima generación encuentre identidad y propósito en Cristo. Weekly gatherings, worship nights, and mentorship.",
-    audience: "Adolescentes y jóvenes adultos / Teens & young adults",
+    body: {
+      es: "Un espacio para que la próxima generación encuentre identidad y propósito en Cristo: reuniones semanales, noches de adoración y mentoría.",
+      en: "A place for the next generation to find identity and purpose in Christ: weekly gatherings, worship nights, and mentorship.",
+    },
+    audience: { es: "Adolescentes y jóvenes adultos", en: "Teens and young adults" },
     highlights: [
-      "Reuniones semanales / Weekly gatherings",
-      "Noches de adoración / Worship nights",
-      "Mentoría y discipulado / Mentorship & discipleship",
+      { es: "Reuniones semanales", en: "Weekly gatherings" },
+      { es: "Noches de adoración", en: "Worship nights" },
+      { es: "Mentoría y discipulado", en: "Mentorship and discipleship" },
     ],
   },
   {
     number: "02",
     slug: "damas",
-    title: "Damas / Ladies",
+    title: { es: "Damas", en: "Ladies" },
     subtitle: "Refined & Empowered",
-    body: "Hermandad, oración y estudio de la Palabra para mujeres de toda edad. Monthly fellowship and service outreach.",
-    audience: "Mujeres de toda edad / Women of every age",
+    body: {
+      es: "Hermandad, oración y estudio de la Palabra para mujeres de toda edad, con convivio mensual y alcance a la comunidad.",
+      en: "Sisterhood, prayer, and Bible study for women of every age, with monthly fellowship and community outreach.",
+    },
+    audience: { es: "Mujeres de toda edad", en: "Women of every age" },
     highlights: [
-      "Hermandad y oración / Sisterhood & prayer",
-      "Estudio de la Palabra / Bible study",
-      "Convivio mensual y alcance / Monthly fellowship & outreach",
+      { es: "Hermandad y oración", en: "Sisterhood and prayer" },
+      { es: "Estudio de la Palabra", en: "Bible study" },
+      { es: "Convivio mensual y alcance", en: "Monthly fellowship and outreach" },
     ],
   },
   {
     number: "03",
     slug: "ninos",
-    title: "Niños / Kids",
+    title: { es: "Niños", en: "Kids" },
     subtitle: "Vine Kids Academy",
-    body: "Enseñanza bíblica en un ambiente seguro y alegre durante el servicio dominical. Ages 3 through 11.",
-    audience: "3 a 11 años / Ages 3 to 11",
+    body: {
+      es: "Enseñanza bíblica en un ambiente seguro y alegre durante el servicio dominical, para niños de 3 a 11 años.",
+      en: "Bible teaching in a safe, joyful environment during the Sunday service, for ages 3 through 11.",
+    },
+    audience: { es: "De 3 a 11 años", en: "Ages 3 to 11" },
     highlights: [
-      "Durante el servicio dominical / During Sunday service",
-      "Enseñanza bíblica a su nivel / Bible teaching at their level",
-      "Ambiente seguro y alegre / A safe, joyful space",
+      { es: "Durante el servicio dominical", en: "During the Sunday service" },
+      { es: "Enseñanza bíblica a su nivel", en: "Bible teaching at their level" },
+      { es: "Ambiente seguro y alegre", en: "A safe, joyful space" },
     ],
   },
-] as const;
+];
 
-export const SERVE_TEAMS = [
+export type ServeTeam = { title: Bilingual; body: Bilingual };
+
+export const SERVE_TEAMS: readonly ServeTeam[] = [
   {
-    title: "Alabanza / Worship",
-    body: "Voces, músicos y sonido para guiar a la iglesia en adoración.",
+    title: { es: "Alabanza", en: "Worship" },
+    body: {
+      es: "Voces, músicos y sonido para guiar a la iglesia en adoración.",
+      en: "Singers, musicians, and sound to lead the church in worship.",
+    },
   },
   {
-    title: "Media",
-    body: "Cámaras, transmisión y pantallas para llevar el servicio más allá de las paredes.",
+    title: { es: "Media", en: "Media" },
+    body: {
+      es: "Cámaras, transmisión y pantallas para llevar el servicio más allá de las paredes.",
+      en: "Cameras, streaming, and screens that carry the service beyond our walls.",
+    },
   },
   {
-    title: "Hospitalidad / Hospitality",
-    body: "Recibir, saludar y hacer que cada visitante se sienta en casa.",
+    title: { es: "Hospitalidad", en: "Hospitality" },
+    body: {
+      es: "Recibir, saludar y hacer que cada visitante se sienta en casa.",
+      en: "Welcoming, greeting, and making every guest feel at home.",
+    },
   },
   {
-    title: "Alcance / Outreach",
-    body: "Llevar el evangelio y ayuda práctica a nuestra comunidad en Houston.",
+    title: { es: "Alcance", en: "Outreach" },
+    body: {
+      es: "Llevar el evangelio y ayuda práctica a nuestra comunidad en Houston.",
+      en: "Bringing the gospel and practical help to our Houston community.",
+    },
   },
-] as const;
+];

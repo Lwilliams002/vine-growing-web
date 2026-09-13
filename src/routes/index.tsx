@@ -8,6 +8,7 @@ import { useAnnouncements } from "@/lib/use-announcements";
 import { fetchSettings, isFacebookVideoUrl } from "@/lib/settings";
 import { useSettings } from "@/lib/use-settings";
 import { FacebookVideo } from "@/components/site/FacebookVideo";
+import { useLang } from "@/lib/i18n";
 import { AnnouncementList } from "@/components/site/Announcements";
 import { PlanYourVisit } from "@/components/site/PlanYourVisit";
 import { NewsletterSignup } from "@/components/site/NewsletterSignup";
@@ -95,6 +96,7 @@ function Home() {
   const data = Route.useLoaderData();
   const announcements = useAnnouncements(data.announcements, 3);
   const settings = useSettings(data.settings);
+  const { t } = useLang();
   const isLive = settings.is_live && isFacebookVideoUrl(settings.live_video_url);
   const sermonUrl = isFacebookVideoUrl(settings.latest_sermon_url)
     ? settings.latest_sermon_url
@@ -114,7 +116,7 @@ function Home() {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-white opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-white" />
           </span>
-          Estamos en vivo ahora — ver / We are live now — watch →
+          {t("Estamos en vivo ahora — ver →", "We're live now — watch →")}
         </Link>
       ) : null}
 
@@ -123,7 +125,10 @@ function Home() {
         <div className="absolute inset-0 z-0">
           <img
             src={heroImg}
-            alt="Pastor smiling while preaching at The Vine Apostolic Church pulpit"
+            alt={t(
+              "Pastor sonriendo mientras predica en The Vine Apostolic Church",
+              "Pastor smiling while preaching at The Vine Apostolic Church",
+            )}
             width={1920}
             height={1280}
             className="animate-zoom size-full object-cover object-[70%_center]"
@@ -133,16 +138,19 @@ function Home() {
 
         <div className="animate-fade-up relative z-10 max-w-4xl px-6 text-center">
           <span className="eyebrow mb-6 block text-primary">
-            Houston, Texas — Apostolic &amp; Pentecostal
+            {t(
+              "Houston, Texas — Apostólica y Pentecostal",
+              "Houston, Texas — Apostolic & Pentecostal",
+            )}
           </span>
           <h1 className="text-balance font-display text-7xl uppercase leading-[0.85] tracking-tighter md:text-[10rem]">
             The Vine <span className="text-primary">Apostolic</span> Church
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-pretty text-lg text-foreground/70 md:text-xl">
-            Un lugar para encontrar vida, propósito y el poder del Espíritu Santo.
-            <span className="mt-2 block font-mono text-sm italic text-muted-foreground">
-              A place to find life, purpose, and the power of the Holy Spirit.
-            </span>
+            {t(
+              "Un lugar para encontrar vida, propósito y el poder del Espíritu Santo.",
+              "A place to find life, purpose, and the power of the Holy Spirit.",
+            )}
           </p>
         </div>
       </section>
@@ -153,17 +161,17 @@ function Home() {
           <div className="flex flex-col divide-y divide-border bg-background p-8 md:flex-row md:divide-x md:divide-y-0 md:p-12">
             <div className="flex-1 pb-8 md:pb-0 md:pr-12">
               <h2 className="mb-6 flex items-center gap-3 font-display text-4xl uppercase">
-                <span className="size-3 bg-primary" /> Horarios / Services
+                <span className="size-3 bg-primary" /> {t("Horarios", "Services")}
               </h2>
               <div className="space-y-6">
                 {SERVICES.map((s) => (
-                  <div key={s.day}>
+                  <div key={`${s.day.es}-${s.time}`}>
                     <div className="flex items-end justify-between border-b border-border pb-2">
-                      <span className="font-display text-2xl uppercase">{s.day}</span>
+                      <span className="font-display text-2xl uppercase">{t(s.day)}</span>
                       <span className="font-mono text-primary">{s.time}</span>
                     </div>
                     <p className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">
-                      {s.detail}
+                      {t(s.detail)}
                     </p>
                   </div>
                 ))}
@@ -173,7 +181,7 @@ function Home() {
             <div className="flex flex-1 flex-col justify-between pt-8 md:pl-12 md:pt-0">
               <div>
                 <h3 className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Ubicación / Location
+                  {t("Ubicación", "Location")}
                 </h3>
                 <p className="text-balance font-display text-2xl uppercase leading-tight">
                   {CHURCH.address}
@@ -191,7 +199,7 @@ function Home() {
                   →
                 </span>
                 <span className="font-mono text-xs uppercase tracking-widest underline decoration-primary/30 underline-offset-4 transition-colors group-hover:text-primary">
-                  Obtener Direcciones / Get Directions
+                  {t("Cómo llegar", "Get directions")}
                 </span>
               </a>
             </div>
@@ -205,13 +213,13 @@ function Home() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
               <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
-                Anuncios
+                {t("Anuncios", "Announcements")}
               </h2>
               <Link
                 to="/events"
                 className="eyebrow mb-3 text-muted-foreground transition-colors hover:text-primary"
               >
-                Ver todos / See all →
+                {t("Ver todos →", "See all →")}
               </Link>
             </div>
             <AnnouncementList items={announcements} />
@@ -252,28 +260,25 @@ function Home() {
           {/* Text */}
           <div className="md:pl-4 lg:pl-8">
             <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Our Identity
+              {t("Quiénes somos", "Who we are")}
             </p>
             <h2 className="mb-8 font-display text-5xl uppercase leading-[0.9] md:text-6xl lg:text-7xl">
-              Nuestra <span className="text-primary">Identidad</span>
+              {t("Nuestra", "Our")}{" "}
+              <span className="text-primary">{t("Identidad", "Identity")}</span>
             </h2>
             <div className="space-y-6">
               <p className="text-lg leading-relaxed text-foreground/80">
-                Somos una comunidad apasionada por la presencia de Dios, arraigada en la verdad
-                Apostólica y comprometida con la transformación de nuestra ciudad en Houston.
+                {t(
+                  "Somos una comunidad apasionada por la presencia de Dios, arraigada en la verdad Apostólica y comprometida con la transformación de nuestra ciudad en Houston.",
+                  "We are a community passionate about God's presence, rooted in Apostolic truth, and committed to transforming our city of Houston.",
+                )}
               </p>
-              <div className="border-l border-primary/30 pl-4">
-                <p className="font-mono text-sm italic leading-relaxed text-muted-foreground">
-                  We are a community passionate about God&apos;s presence, rooted in Apostolic
-                  truth, and committed to transforming our city of Houston.
-                </p>
-              </div>
               <div className="pt-4">
                 <Link
                   to="/about"
                   className="inline-block w-full rounded-xl border border-border px-8 py-4 text-center font-mono text-xs uppercase tracking-widest transition-all hover:bg-foreground hover:text-background md:w-auto"
                 >
-                  Conoce Más / Learn More
+                  {t("Conoce más", "Learn more")}
                 </Link>
               </div>
             </div>
@@ -285,8 +290,12 @@ function Home() {
       <section className="bg-card px-6 py-32">
         <div className="mx-auto max-w-6xl">
           <div className="mb-16 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
-            <h2 className="font-display text-6xl uppercase tracking-tighter">Ministerios</h2>
-            <span className="eyebrow mb-4 text-muted-foreground">Groups &amp; Ministries</span>
+            <h2 className="font-display text-6xl uppercase tracking-tighter">
+              {t("Ministerios", "Ministries")}
+            </h2>
+            <span className="eyebrow mb-4 text-muted-foreground">
+              {t("Grupos y ministerios", "Groups & ministries")}
+            </span>
           </div>
           <div className="grid grid-cols-1 gap-1 md:grid-cols-3">
             {MINISTRIES.map((m) => (
@@ -312,13 +321,13 @@ function Home() {
                 </span>
                 <div className="relative z-10">
                   <h3 className="mb-2 text-balance font-display text-4xl uppercase leading-none transition-colors group-hover:text-primary md:text-3xl lg:text-4xl">
-                    {m.title}
+                    {t(m.title)}
                   </h3>
                   <p className="text-xs uppercase tracking-widest text-foreground/70">
                     {m.subtitle}
                   </p>
                   <span className="mt-5 inline-block whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.2em] text-primary opacity-0 transition-all duration-500 group-hover:opacity-100">
-                    Conoce más / Learn more →
+                    {t("Conoce más →", "Learn more →")}
                   </span>
                 </div>
               </Link>
@@ -331,8 +340,12 @@ function Home() {
       <section className="px-6 py-32">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
-            <h2 className="font-display text-6xl uppercase tracking-tighter">Vida en La Vid</h2>
-            <span className="eyebrow mb-4 text-muted-foreground">Life at The Vine</span>
+            <h2 className="font-display text-6xl uppercase tracking-tighter">
+              {t("Vida en La Vid", "Life at The Vine")}
+            </h2>
+            <span className="eyebrow mb-4 text-muted-foreground">
+              {t("Nuestra comunidad", "Our community")}
+            </span>
           </div>
           <div className="grid grid-cols-2 gap-1 md:grid-cols-3">
             {GALLERY.map((img) => (
@@ -355,27 +368,29 @@ function Home() {
         <div className="mx-auto grid max-w-6xl border border-border bg-background md:grid-cols-2">
           <div className="p-12 md:p-20">
             <span className="mb-6 block font-mono text-xs uppercase tracking-widest text-primary">
-              Última Palabra / Latest Word
+              {t("Última Palabra", "Latest Word")}
             </span>
             <h2 className="mb-8 text-balance font-display text-5xl uppercase leading-none md:text-6xl">
               {settings.latest_sermon_title || "El Poder del Espíritu Santo"}
             </h2>
             <p className="mb-10 font-mono text-sm italic text-foreground/60">
-              &ldquo;Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de
-              dominio propio.&rdquo;
+              {t(
+                "“Porque no nos ha dado Dios espíritu de cobardía, sino de poder, de amor y de dominio propio.”",
+                "“For God has not given us a spirit of fear, but of power and of love and of a sound mind.”",
+              )}
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
                 to="/sermons"
                 className="inline-block bg-primary px-10 py-4 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
               >
-                Ver Mensaje / Watch Now
+                {t("Ver mensaje", "Watch now")}
               </Link>
               <Link
                 to="/live"
                 className="inline-block border border-border px-8 py-4 font-mono text-xs uppercase tracking-widest transition-colors hover:border-primary hover:text-primary"
               >
-                En Vivo / Live
+                {t("En Vivo", "Live")}
               </Link>
             </div>
           </div>
@@ -383,7 +398,7 @@ function Home() {
             {sermonUrl ? (
               <FacebookVideo
                 url={sermonUrl}
-                title={settings.latest_sermon_title || "Último mensaje"}
+                title={settings.latest_sermon_title || t("Último mensaje", "Latest message")}
                 className="self-center"
               />
             ) : (
@@ -406,19 +421,22 @@ function Home() {
       <section className="bg-primary px-6 py-20 text-primary-foreground">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
           <div>
-            <span className="eyebrow mb-4 block opacity-70">Oración / Prayer</span>
+            <span className="eyebrow mb-4 block opacity-70">{t("Oración", "Prayer")}</span>
             <h2 className="text-balance font-display text-4xl uppercase leading-none md:text-6xl">
-              ¿Necesitas oración?
+              {t("¿Necesitas oración?", "Need prayer?")}
             </h2>
             <p className="mt-4 max-w-xl font-mono text-sm italic opacity-80">
-              Need prayer? Send us your request and our pastoral team will pray for you this week.
+              {t(
+                "Envíanos tu petición y nuestro equipo pastoral orará por ti esta semana.",
+                "Send us your request and our pastoral team will pray for you this week.",
+              )}
             </p>
           </div>
           <Link
             to="/prayer"
             className="inline-block bg-primary-foreground px-10 py-5 font-display uppercase tracking-widest text-primary transition-colors hover:bg-foreground hover:text-background"
           >
-            Enviar Petición / Send a Request
+            {t("Enviar petición", "Send a request")}
           </Link>
         </div>
       </section>

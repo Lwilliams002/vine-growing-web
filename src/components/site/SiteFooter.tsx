@@ -1,17 +1,21 @@
 import { Link } from "@tanstack/react-router";
+
 import logo from "@/assets/vine-logo.png";
 import { CHURCH } from "@/lib/church";
+import { useLang, type Bilingual } from "@/lib/i18n";
 
-const LINKS = [
-  { to: "/giving", label: "Give" },
-  { to: "/ministries", label: "Ministries" },
-  { to: "/events", label: "Events" },
-  { to: "/live", label: "Live" },
-  { to: "/prayer", label: "Prayer" },
-  { to: "/contact", label: "Contact" },
-] as const;
+const LINKS: readonly { to: string; label: Bilingual }[] = [
+  { to: "/giving", label: { es: "Donar", en: "Give" } },
+  { to: "/ministries", label: { es: "Ministerios", en: "Ministries" } },
+  { to: "/events", label: { es: "Eventos", en: "Events" } },
+  { to: "/live", label: { es: "En Vivo", en: "Live" } },
+  { to: "/prayer", label: { es: "Oración", en: "Prayer" } },
+  { to: "/contact", label: { es: "Contacto", en: "Contact" } },
+];
 
 export function SiteFooter() {
+  const { t } = useLang();
+
   return (
     <footer className="bg-surface-deep px-6 pb-16 pt-32">
       <div className="mx-auto max-w-6xl">
@@ -29,22 +33,23 @@ export function SiteFooter() {
               The Vine Houston
             </h3>
             <p className="font-mono text-xs uppercase leading-loose tracking-widest text-muted-foreground">
-              Estableciendo el Reino de Dios en la ciudad espacial.
-              <br />
-              Establishing God&apos;s Kingdom in the Space City.
+              {t(
+                "Estableciendo el Reino de Dios en la ciudad espacial.",
+                "Establishing God's Kingdom in the Space City.",
+              )}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-20">
             <div>
               <h4 className="mb-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Quick Links
+                {t("Enlaces", "Quick links")}
               </h4>
               <ul className="space-y-4 font-display text-lg uppercase">
                 {LINKS.map((l) => (
                   <li key={l.to}>
                     <Link to={l.to} className="transition-colors hover:text-primary">
-                      {l.label}
+                      {t(l.label)}
                     </Link>
                   </li>
                 ))}
@@ -52,7 +57,7 @@ export function SiteFooter() {
             </div>
             <div>
               <h4 className="mb-8 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                Contact
+                {t("Contacto", "Contact")}
               </h4>
               <address className="font-display text-lg uppercase not-italic leading-tight text-foreground/70">
                 {CHURCH.address}
@@ -86,7 +91,8 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-8 md:flex-row">
           <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            © {new Date().getFullYear()} {CHURCH.name}. All rights reserved.
+            © {new Date().getFullYear()} {CHURCH.name}.{" "}
+            {t("Todos los derechos reservados.", "All rights reserved.")}
           </p>
           <div className="flex items-center gap-6">
             <Link

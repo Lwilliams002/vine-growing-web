@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
 import { MINISTRIES, SERVE_TEAMS, SITE_URL } from "@/lib/church";
+import { useLang } from "@/lib/i18n";
 import youthImg from "@/assets/hands-raised-man.jpg";
 import ladiesImg from "@/assets/worship-woman-hands.jpg";
 import kidsImg from "@/assets/kids-worship.jpg";
@@ -38,18 +39,23 @@ export const Route = createFileRoute("/ministries")({
 });
 
 function Ministries() {
+  const { t } = useLang();
+
   return (
     <>
       <SiteHeader />
       <PageHero
-        eyebrow="Groups & Ministries"
-        title="Ministerios"
-        intro="Encuentra tu lugar en la familia. Every ministry is a doorway into community, discipleship, and service."
+        eyebrow={t("Grupos y ministerios", "Groups & ministries")}
+        title={t("Ministerios", "Ministries")}
+        intro={t(
+          "Encuentra tu lugar en la familia. Cada ministerio es una puerta a la comunidad, el discipulado y el servicio.",
+          "Find your place in the family. Every ministry is a doorway into community, discipleship, and service.",
+        )}
       />
 
       {/* Jump links */}
       <nav
-        aria-label="Ministries"
+        aria-label={t("Ministerios", "Ministries")}
         className="sticky top-[73px] z-40 border-b border-border bg-background/80 backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-6xl gap-8 overflow-x-auto px-6 py-4 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
@@ -60,11 +66,12 @@ function Ministries() {
               className="whitespace-nowrap transition-colors hover:text-primary"
             >
               <span className="mr-2 text-primary">{m.number}</span>
-              {m.title}
+              {t(m.title)}
             </a>
           ))}
           <a href="#servir" className="whitespace-nowrap transition-colors hover:text-primary">
-            <span className="mr-2 text-primary">04</span>Sirve / Serve
+            <span className="mr-2 text-primary">04</span>
+            {t("Servir", "Serve")}
           </a>
         </div>
       </nav>
@@ -103,24 +110,24 @@ function Ministries() {
                 <div>
                   <span className="eyebrow mb-4 block text-primary">{m.subtitle}</span>
                   <h2 className="text-balance font-display text-5xl uppercase leading-[0.9] md:text-6xl">
-                    {m.title}
+                    {t(m.title)}
                   </h2>
-                  <p className="mt-6 text-lg leading-relaxed text-foreground/70">{m.body}</p>
+                  <p className="mt-6 text-lg leading-relaxed text-foreground/70">{t(m.body)}</p>
 
                   <dl className="mt-10 space-y-8 border-l border-primary/30 pl-6">
                     <dt className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Para quién / Who
+                      {t("Para quién", "Who it's for")}
                     </dt>
-                    <dd className="-mt-6 text-sm text-foreground/80">{m.audience}</dd>
+                    <dd className="-mt-6 text-sm text-foreground/80">{t(m.audience)}</dd>
                     <dt className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Qué esperar / What to expect
+                      {t("Qué esperar", "What to expect")}
                     </dt>
                     <dd className="-mt-6">
                       <ul className="space-y-2 text-sm text-foreground/80">
                         {m.highlights.map((h) => (
-                          <li key={h} className="flex gap-3">
+                          <li key={h.es} className="flex gap-3">
                             <span className="mt-2 size-1.5 shrink-0 bg-primary" />
-                            {h}
+                            {t(h)}
                           </li>
                         ))}
                       </ul>
@@ -131,7 +138,7 @@ function Ministries() {
                     to="/contact"
                     className="mt-10 inline-block bg-primary px-8 py-4 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
                   >
-                    Conéctate / Get Connected
+                    {t("Conéctate", "Get connected")}
                   </Link>
                 </div>
               </div>
@@ -145,21 +152,23 @@ function Ministries() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
             <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
-              Sirve con nosotros
+              {t("Sirve con nosotros", "Serve with us")}
             </h2>
-            <span className="eyebrow mb-3 text-muted-foreground">Serve teams</span>
+            <span className="eyebrow mb-3 text-muted-foreground">
+              {t("Equipos de servicio", "Serve teams")}
+            </span>
           </div>
           <div className="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-4">
-            {SERVE_TEAMS.map((t, i) => {
+            {SERVE_TEAMS.map((team, i) => {
               const Icon = TEAM_ICONS[i] ?? Music;
               return (
                 <div
-                  key={t.title}
+                  key={team.title.es}
                   className="group border border-border bg-card p-8 transition-colors hover:border-primary"
                 >
                   <Icon className="size-8 text-primary" strokeWidth={1.5} />
-                  <h3 className="mt-8 font-display text-2xl uppercase">{t.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/60">{t.body}</p>
+                  <h3 className="mt-8 font-display text-2xl uppercase">{t(team.title)}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/60">{t(team.body)}</p>
                 </div>
               );
             })}
@@ -167,17 +176,21 @@ function Ministries() {
 
           <div className="mt-16 flex flex-col items-start justify-between gap-6 border border-border p-10 md:flex-row md:items-center">
             <div>
-              <h3 className="font-display text-3xl uppercase">¿Quieres servir?</h3>
+              <h3 className="font-display text-3xl uppercase">
+                {t("¿Quieres servir?", "Want to serve?")}
+              </h3>
               <p className="mt-2 max-w-xl text-sm text-foreground/60">
-                Escríbenos y te conectamos con un equipo. Tell us where you'd like to help and we'll
-                get you plugged in.
+                {t(
+                  "Escríbenos y te conectamos con un equipo.",
+                  "Tell us where you'd like to help and we'll get you plugged in.",
+                )}
               </p>
             </div>
             <Link
               to="/contact"
               className="inline-block shrink-0 bg-primary px-10 py-4 font-display uppercase tracking-widest text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
             >
-              Contáctanos
+              {t("Contáctanos", "Contact us")}
             </Link>
           </div>
         </div>
