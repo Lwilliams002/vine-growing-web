@@ -55,7 +55,7 @@ function About() {
           width={800}
           height={1000}
           loading="lazy"
-          className="mx-auto aspect-[4/5] w-full max-w-[240px] object-cover ring-1 ring-border md:max-w-sm"
+          className="aspect-[4/5] w-full object-cover ring-1 ring-border"
         />
         <div className="space-y-6 leading-relaxed text-foreground/70">
           <h2 className="font-display text-4xl uppercase leading-none text-foreground">
