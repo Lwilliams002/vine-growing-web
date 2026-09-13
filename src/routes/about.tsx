@@ -55,7 +55,7 @@ function About() {
           width={800}
           height={1000}
           loading="lazy"
-          className="aspect-[4/5] w-full object-cover ring-1 ring-border"
+          className="mx-auto aspect-[4/5] w-full max-w-[240px] object-cover ring-1 ring-border md:max-w-sm"
         />
         <div className="space-y-6 leading-relaxed text-foreground/70">
           <h2 className="font-display text-4xl uppercase leading-none text-foreground">
@@ -86,7 +86,7 @@ function About() {
         <p className="mb-6 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
           {t("Nuestra Familia", "Our Family")}
         </p>
-        <div className="grid grid-cols-1 gap-1 md:grid-cols-3">
+        <div className="grid grid-cols-3 gap-1">
           {[
             { src: congregationImg, alt: "Congregation worshipping together on a Sunday" },
             { src: handsRaisedImg, alt: "Congregation worshipping with hands raised" },
@@ -99,7 +99,7 @@ function About() {
               width={1200}
               height={1600}
               loading="lazy"
-              className="aspect-[4/5] w-full object-cover ring-1 ring-border"
+              className="aspect-[3/4] w-full object-cover ring-1 ring-border md:aspect-[4/3]"
             />
           ))}
         </div>
