@@ -6,6 +6,12 @@
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "dev"],
       "port": 8080
+    },
+    {
+      "name": "expo",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && npx expo start --ios --clear"],
+      "port": 8081
     }
   ]
 }

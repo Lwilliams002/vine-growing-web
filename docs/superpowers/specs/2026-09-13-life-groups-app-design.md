@@ -15,7 +15,7 @@ members see their group's announcements and documents; and a super admin
 
 | Topic | Decision |
 |---|---|
-| Stack | Expo SDK 55, expo-router, NativeWind 4, TanStack Query, supabase-js, EAS builds. Mirrors `../apexcommission-native`. |
+| Stack | Expo SDK 57 (the sibling `../apexcommission-native` is on 55; the simulator's Expo Go required 57), expo-router, NativeWind 4, TanStack Query, supabase-js, EAS builds. |
 | Backend | The website's existing Supabase project (`yyevvpuuvilzdnhefusv`). New tables prefixed `lg_`. |
 | Language | Spanish default with English toggle, same `t(es, en)` API as the website. |
 | Location | Sibling folder `/Users/lezdev/Desktop/Williams/vine-life-groups-app` (own git repo). SQL lives in the website repo at `supabase/life-groups.sql`. |
