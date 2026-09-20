@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "deploy:cloudflare": "npm run build && npx wrangler --cwd .output/server deploy"
+    "deploy:cloudflare": "npm run build && npx wrangler deploy"
   },
   "overrides": {
     "rolldown": "1.2.1"
