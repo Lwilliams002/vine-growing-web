@@ -2,7 +2,7 @@ import type { Bilingual } from "./i18n";
 
 // Public origin of the deployed site (no trailing slash). Used for canonical
 // URLs, Open Graph tags, and the sitemap. Update this when the domain is final.
-export const SITE_URL = "https://thevinehouston.org";
+export const SITE_URL = "https://thevineapostolic.com";
 
 export const CHURCH = {
   name: "The Vine Apostolic Church",
