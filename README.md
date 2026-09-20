@@ -54,14 +54,14 @@ Both values are safe to expose in the browser; the SQL policies decide what the 
 ## Hosting on Cloudflare (production)
 
 The build already targets Cloudflare Workers (Nitro preset `cloudflare-module`):
-`bun run build` writes `.output/server` (the worker) and `.output/public` (static files),
+`npm run build` writes `.output/server` (the worker) and `.output/public` (static files),
 plus a ready `.output/server/wrangler.json`.
 
 **One-time setup**
 
 1. Create a free account at https://dash.cloudflare.com and open **Workers & Pages -> Create -> Import a repository**.
 2. Pick `Lwilliams002/vine-growing-web`, branch `main`, and set:
-   - Build command: `bun run build`
+   - Build command: `npm run build`
    - Deploy command: `npx wrangler --cwd .output/server deploy`
    - Build variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (same values as Lovable).
 3. Deploy once. The site is live at `https://lwilliams002-vine-growing-web.<account>.workers.dev`.
@@ -75,7 +75,7 @@ plus a ready `.output/server/wrangler.json`.
      Cloudflare shows on the custom-domain screen.
 5. Every push to `main` redeploys automatically.
 
-Manual deploy from this machine (after `npx wrangler login`): `bun run deploy:cloudflare`.
+Manual deploy from this machine (after `npx wrangler login`): `npm run deploy:cloudflare`.
 
 Set `SITE_URL` in `src/lib/church.ts` to the final domain before the first production deploy;
 it feeds canonical links, Open Graph tags, and the sitemap.
