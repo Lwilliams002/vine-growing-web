@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "deploy:cloudflare": "bun run build && npx wrangler --cwd .output/server deploy"
   },
   "overrides": {
     "rolldown": "1.2.1"

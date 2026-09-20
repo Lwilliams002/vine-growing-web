@@ -10,6 +10,8 @@ import { useSettings } from "@/lib/use-settings";
 import { FacebookVideo } from "@/components/site/FacebookVideo";
 import { useLang } from "@/lib/i18n";
 import { AnnouncementCard } from "@/components/site/Announcements";
+import { FlyerCard } from "@/components/site/EventFlyers";
+import { upcomingFlyers } from "@/lib/flyers";
 import { PlanYourVisit } from "@/components/site/PlanYourVisit";
 import { NewsletterSignup } from "@/components/site/NewsletterSignup";
 import heroImg from "@/assets/hero-pastor.jpg";
@@ -96,6 +98,7 @@ function Home() {
   const data = Route.useLoaderData();
   const announcements = useAnnouncements(data.announcements, 1);
   const nextAnnouncement = announcements[0];
+  const nextFlyer = upcomingFlyers()[0];
   const settings = useSettings(data.settings);
   const { t } = useLang();
   const isLive = settings.is_live && isFacebookVideoUrl(settings.live_video_url);
@@ -207,6 +210,28 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Next event flyer (src/lib/flyers.ts) */}
+      {nextFlyer ? (
+        <section className="px-6 pt-32">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
+              <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
+                {t("Próximo Evento", "Next Event")}
+              </h2>
+              <Link
+                to="/events"
+                className="eyebrow mb-3 text-muted-foreground transition-colors hover:text-primary"
+              >
+                {t("Ver todos →", "See all →")}
+              </Link>
+            </div>
+            <div className="mx-auto max-w-3xl">
+              <FlyerCard flyer={nextFlyer} featured />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* Announcements (managed by the pastor at /admin) */}
       {nextAnnouncement ? (

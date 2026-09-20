@@ -4,14 +4,24 @@
     {
       "name": "vine-dev",
       "runtimeExecutable": "bun",
-      "runtimeArgs": ["run", "dev"],
-      "port": 8080
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "8090",
+        "--strictPort"
+      ],
+      "port": 8090
     },
     {
       "name": "expo",
       "runtimeExecutable": "sh",
-      "runtimeArgs": ["-c", "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && npx expo start --ios --clear"],
-      "port": 8081
+      "runtimeArgs": [
+        "-c",
+        "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && npx expo start --port 8082 --ios"
+      ],
+      "port": 8082
     }
   ]
 }

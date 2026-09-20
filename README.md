@@ -51,6 +51,35 @@ something without deleting it, and the pin to keep it at the top.
 
 Both values are safe to expose in the browser; the SQL policies decide what the anon key can do.
 
+## Hosting on Cloudflare (production)
+
+The build already targets Cloudflare Workers (Nitro preset `cloudflare-module`):
+`bun run build` writes `.output/server` (the worker) and `.output/public` (static files),
+plus a ready `.output/server/wrangler.json`.
+
+**One-time setup**
+
+1. Create a free account at https://dash.cloudflare.com and open **Workers & Pages -> Create -> Import a repository**.
+2. Pick `Lwilliams002/vine-growing-web`, branch `main`, and set:
+   - Build command: `bun run build`
+   - Deploy command: `npx wrangler --cwd .output/server deploy`
+   - Build variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (same values as Lovable).
+3. Deploy once. The site is live at `https://lwilliams002-vine-growing-web.<account>.workers.dev`.
+4. **Custom domain:** in the worker's **Settings -> Domains & Routes -> Add -> Custom domain**,
+   enter the church domain (and `www.` as a second custom domain).
+   - Easiest: move the domain's nameservers from GoDaddy to Cloudflare
+     (Cloudflare -> Add a site -> enter the domain -> it shows two nameservers;
+     in GoDaddy: My Products -> DNS -> Nameservers -> Change -> enter those two).
+     Cloudflare then creates the records itself.
+   - Without moving nameservers: keep DNS at GoDaddy and add the CNAME records
+     Cloudflare shows on the custom-domain screen.
+5. Every push to `main` redeploys automatically.
+
+Manual deploy from this machine (after `npx wrangler login`): `bun run deploy:cloudflare`.
+
+Set `SITE_URL` in `src/lib/church.ts` to the final domain before the first production deploy;
+it feeds canonical links, Open Graph tags, and the sitemap.
+
 ## Test link on GitHub Pages
 
 Every push to `main` also publishes a static copy of the site to GitHub Pages via

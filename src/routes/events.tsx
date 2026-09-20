@@ -4,6 +4,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { PageHero } from "@/components/site/PageHero";
 import { AnnouncementList } from "@/components/site/Announcements";
+import { FlyerGrid } from "@/components/site/EventFlyers";
+import { upcomingFlyers } from "@/lib/flyers";
 import { CHURCH, SITE_URL } from "@/lib/church";
 import { fetchPublicAnnouncements } from "@/lib/announcements";
 import { useAnnouncements } from "@/lib/use-announcements";
@@ -33,6 +35,7 @@ export const Route = createFileRoute("/events")({
 function Events() {
   const announcements = useAnnouncements(Route.useLoaderData());
   const { t } = useLang();
+  const flyers = upcomingFlyers();
 
   return (
     <>
@@ -46,7 +49,26 @@ function Events() {
         )}
       />
 
+      {flyers.length > 0 ? (
+        <section className="mx-auto max-w-6xl px-6 pt-24">
+          <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
+            <h2 className="font-display text-5xl uppercase tracking-tighter md:text-6xl">
+              {t("Próximos eventos", "Upcoming events")}
+            </h2>
+            <span className="eyebrow mb-3 text-muted-foreground">
+              {t("Toca el volante para verlo completo", "Tap a flyer to see it full size")}
+            </span>
+          </div>
+          <FlyerGrid flyers={flyers} />
+        </section>
+      ) : null}
+
       <section className="mx-auto max-w-6xl px-6 py-24">
+        {flyers.length > 0 ? (
+          <h2 className="mb-10 font-display text-4xl uppercase tracking-tighter md:text-5xl">
+            {t("Anuncios", "Announcements")}
+          </h2>
+        ) : null}
         <AnnouncementList
           items={announcements}
           emptyText={t(
