@@ -11,7 +11,7 @@ export const CHURCH = {
   city: "Houston, TX 77039",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=14615+Aldine+Westfield+Rd+Houston+TX+77039",
-  email: "info@thevinehouston.org",
+  email: "thevineapostolicchurch@gmail.com",
   // TODO: replace with the church's real number. 555-01xx numbers are reserved
   // placeholders and will not connect.
   phoneDisplay: "(713) 555-0100",
