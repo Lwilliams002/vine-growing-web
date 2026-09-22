@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { getSupabase } from "./supabase";
+import { api } from "./api";
 
 export type Announcement = {
   id: string;
@@ -16,54 +16,23 @@ export type Announcement = {
   updated_at: string;
 };
 
-const TABLE = "announcements";
-
-function todayIso(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
 /**
  * Published announcements for the public site: pinned first, then soonest
- * event date, then newest. Past-dated events are hidden automatically.
- * Never throws; a misconfigured or unreachable backend just yields [].
+ * event date, then newest. Past-dated events are hidden by the API.
+ * Never throws; an unreachable backend just yields [].
  */
 export async function fetchPublicAnnouncements(limit = 50): Promise<Announcement[]> {
   try {
-    const sb = getSupabase();
-    if (!sb) return [];
-    const { data, error } = await sb
-      .from(TABLE)
-      .select("*")
-      .eq("is_published", true)
-      .or(`event_date.is.null,event_date.gte.${todayIso()}`)
-      .order("is_pinned", { ascending: false })
-      .order("event_date", { ascending: true, nullsFirst: false })
-      .order("created_at", { ascending: false })
-      .limit(limit);
-    if (error) {
-      console.error("Failed to load announcements", error);
-      return [];
-    }
-    return (data ?? []) as Announcement[];
+    return await api<Announcement[]>(`/site/announcements?limit=${limit}`);
   } catch (err) {
-    // Missing backend config or network failure must never break the public site.
     console.error("Announcements unavailable", err);
     return [];
   }
 }
 
-/** Every announcement, for the admin screen. Requires a signed-in session. */
-export async function fetchAllAnnouncements(): Promise<Announcement[]> {
-  const sb = getSupabase();
-  if (!sb) return [];
-  const { data, error } = await sb
-    .from(TABLE)
-    .select("*")
-    .order("is_pinned", { ascending: false })
-    .order("event_date", { ascending: true, nullsFirst: false })
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return (data ?? []) as Announcement[];
+/** Every announcement, for the admin screen. Requires a signed-in admin. */
+export function fetchAllAnnouncements(): Promise<Announcement[]> {
+  return api<Announcement[]>("/site/announcements/all", { auth: true });
 }
 
 const optionalText = z.string().trim().max(200);
@@ -91,38 +60,16 @@ export const announcementFormSchema = z.object({
 
 export type AnnouncementForm = z.infer<typeof announcementFormSchema>;
 
-function toRow(form: AnnouncementForm) {
-  return {
-    title: form.title,
-    body: form.body,
-    event_date: form.event_date || null,
-    event_time: form.event_time || null,
-    link_url: form.link_url || null,
-    link_label: form.link_label || null,
-    is_pinned: form.is_pinned,
-    is_published: form.is_published,
-  };
-}
-
 export async function createAnnouncement(form: AnnouncementForm): Promise<void> {
-  const sb = getSupabase();
-  if (!sb) throw new Error("Supabase is not configured");
-  const { error } = await sb.from(TABLE).insert(toRow(form));
-  if (error) throw error;
+  await api("/site/announcements", { method: "POST", auth: true, json: form });
 }
 
 export async function updateAnnouncement(id: string, form: AnnouncementForm): Promise<void> {
-  const sb = getSupabase();
-  if (!sb) throw new Error("Supabase is not configured");
-  const { error } = await sb.from(TABLE).update(toRow(form)).eq("id", id);
-  if (error) throw error;
+  await api(`/site/announcements/${id}`, { method: "PATCH", auth: true, json: form });
 }
 
 export async function deleteAnnouncement(id: string): Promise<void> {
-  const sb = getSupabase();
-  if (!sb) throw new Error("Supabase is not configured");
-  const { error } = await sb.from(TABLE).delete().eq("id", id);
-  if (error) throw error;
+  await api(`/site/announcements/${id}`, { method: "DELETE", auth: true });
 }
 
 export function toForm(a: Announcement): AnnouncementForm {

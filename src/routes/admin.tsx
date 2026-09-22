@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Session } from "@supabase/supabase-js";
 import { Eye, EyeOff, LogOut, Pencil, Pin, Plus, Trash2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { CHURCH } from "@/lib/church";
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
+import { currentUser, signIn, signOut, ApiError, type AdminUser } from "@/lib/api";
 import {
   EMPTY_FORM,
   announcementFormSchema,
@@ -41,18 +40,17 @@ const fieldClass =
   "rounded-none border-border bg-background px-4 py-6 font-body text-base text-foreground placeholder:text-muted-foreground/60 focus-visible:ring-primary";
 
 function Admin() {
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
+  // undefined = still checking the saved session; null = signed out.
+  const [user, setUser] = useState<AdminUser | null | undefined>(undefined);
 
   useEffect(() => {
-    const sb = getSupabase();
-    if (!sb) {
-      setSession(null);
-      return;
-    }
-    sb.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: sub } = sb.auth.onAuthStateChange((_event, s) => setSession(s));
-    return () => sub.subscription.unsubscribe();
+    currentUser().then(setUser);
   }, []);
+
+  async function onSignOut() {
+    await signOut();
+    setUser(null);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -70,10 +68,10 @@ function Admin() {
             Admin
           </span>
         </Link>
-        {session ? (
+        {user ? (
           <button
             type="button"
-            onClick={() => getSupabase()?.auth.signOut()}
+            onClick={onSignOut}
             className="inline-flex items-center gap-2 border border-border px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
             <LogOut className="size-3.5" /> Salir / Sign out
@@ -82,19 +80,21 @@ function Admin() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-12">
-        {!isSupabaseConfigured ? (
-          <Notice>
-            El panel aún no está conectado a la base de datos. / The admin panel is not connected to
-            the database yet.
-          </Notice>
-        ) : session === undefined ? (
+        {user === undefined ? (
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
             Cargando… / Loading…
           </p>
-        ) : session ? (
-          <Dashboard />
+        ) : user === null ? (
+          <Login onSignedIn={setUser} />
+        ) : user.role !== "super_admin" ? (
+          <Notice>
+            La cuenta <strong>{user.email}</strong> no es administradora. Solo el pastor
+            (administrador de la app Vine Life Groups) puede editar el sitio. / This account is not
+            an administrator. Only the pastor (super admin in the Vine Life Groups app) can edit the
+            site.
+          </Notice>
         ) : (
-          <Login />
+          <Dashboard />
         )}
       </main>
     </div>
@@ -111,7 +111,7 @@ function Notice({ children }: { children: React.ReactNode }) {
 
 /* ---------------- Login ---------------- */
 
-function Login() {
+function Login({ onSignedIn }: { onSignedIn: (u: AdminUser) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -119,13 +119,19 @@ function Login() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const sb = getSupabase();
-    if (!sb) return;
     setBusy(true);
     setError(null);
-    const { error } = await sb.auth.signInWithPassword({ email, password });
-    setBusy(false);
-    if (error) setError("Correo o contraseña incorrectos. / Wrong email or password.");
+    try {
+      onSignedIn(await signIn(email, password));
+    } catch (err) {
+      setError(
+        err instanceof ApiError && err.status === 401
+          ? "Correo o contraseña incorrectos. / Wrong email or password."
+          : "No se pudo iniciar sesión. Intenta de nuevo. / Could not sign in. Please try again.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -133,7 +139,8 @@ function Login() {
       <span className="eyebrow mb-4 block text-primary">Acceso / Sign in</span>
       <h1 className="font-display text-5xl uppercase leading-none">Anuncios</h1>
       <p className="mt-4 text-sm text-foreground/60">
-        Inicia sesión para publicar y editar los anuncios del sitio.
+        Usa la misma cuenta de la app Vine Life Groups. / Use the same account as the Vine Life
+        Groups app.
       </p>
       <form onSubmit={onSubmit} className="mt-10 space-y-6">
         <div>

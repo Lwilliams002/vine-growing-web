@@ -3,9 +3,8 @@
 #
 # One-time setup in the GitHub repo:
 #   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
-#   Settings -> Secrets and variables -> Actions -> New repository secret:
-#     VITE_SUPABASE_URL              (Lovable Cloud / Supabase project URL)
-#     VITE_SUPABASE_PUBLISHABLE_KEY  (its publishable / anon key)
+# No secrets needed: the site reads its content from the church's Cloudflare
+# Worker (api.thevineapostolic.com), configured in src/lib/church.ts.
 name: Deploy to GitHub Pages
 
 on:
@@ -38,8 +37,6 @@ jobs:
       - name: Build static site
         env:
           GITHUB_PAGES_BASE: /${{ github.event.repository.name }}/
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: bun run build
 
       - name: Prepare Pages artifact
