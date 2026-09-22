@@ -19,6 +19,8 @@ export const CHURCH = {
   whatsapp: "17135550100", // wa.me link, digits only
   facebook: "https://www.facebook.com/thevinehouston/",
   givingUrl: "https://app.securegive.com/thevinehouston",
+  // Backend of the Vine Life Groups mobile app (Cloudflare Worker).
+  appApiUrl: "https://api.thevineapostolic.com",
   // Web3Forms access key for the prayer request form. Web3Forms only accepts
   // browser submissions on the free plan and documents this key as safe to be
   // public; it routes to the church inbox and can be rotated in the dashboard.

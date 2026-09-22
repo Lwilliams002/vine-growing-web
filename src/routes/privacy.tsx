@@ -188,8 +188,8 @@ const APP_SECTIONS: Section[] = [
     title: { es: "Eliminar tu cuenta", en: "Delete your account" },
     blocks: [
       p(
-        "Puedes eliminar tu cuenta y tus datos en cualquier momento desde la app: abre Perfil y toca “Eliminar cuenta”. La eliminación es inmediata y no se puede deshacer. Si ya no tienes acceso a la app, escríbenos al correo de abajo desde la dirección con la que te registraste y la eliminaremos por ti.",
-        "You can delete your account and data at any time from the app: open Profile and tap “Delete account”. Deletion is immediate and cannot be undone. If you no longer have access to the app, email us at the address below from the address you signed up with and we will delete it for you.",
+        "Puedes eliminar tu cuenta y tus datos en cualquier momento desde la app: abre Perfil y toca “Eliminar cuenta”. Si ya no tienes la app, hazlo desde la página thevineapostolic.com/delete-account con tu correo y contraseña. La eliminación es inmediata y no se puede deshacer. También puedes escribirnos al correo de abajo desde la dirección con la que te registraste.",
+        "You can delete your account and data at any time from the app: open Profile and tap “Delete account”. If you no longer have the app, do it at thevineapostolic.com/delete-account with your email and password. Deletion is immediate and cannot be undone. You can also email us at the address below from the address you signed up with.",
       ),
     ],
   },
