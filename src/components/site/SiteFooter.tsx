@@ -11,6 +11,7 @@ const LINKS: readonly { to: string; label: Bilingual }[] = [
   { to: "/live", label: { es: "En Vivo", en: "Live" } },
   { to: "/prayer", label: { es: "Oración", en: "Prayer" } },
   { to: "/contact", label: { es: "Contacto", en: "Contact" } },
+  { to: "/privacy", label: { es: "Privacidad", en: "Privacy" } },
 ];
 
 export function SiteFooter() {

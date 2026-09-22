@@ -14,13 +14,13 @@ demo accounts for every role, so the whole app can be tried today.
 
 ## Decisions
 
-| Topic | Decision |
-|---|---|
-| AWS stack | Amplify Gen 2: Cognito (auth), Amplify Data on DynamoDB (API), S3 (storage), Lambda functions for privileged operations. |
-| Where the backend lives | `vine-life-groups-app/amplify/`. One backend serves the app and the website. The website receives a copy of `amplify_outputs.json`. |
-| Roles | Cognito groups `LEADERS` and `ADMINS`. Everyone else is a member. `Profile.role` mirrors the group for display and querying. |
-| Demo mode | `EXPO_PUBLIC_BACKEND=demo` (or no `amplify_outputs.json`) selects a local backend in AsyncStorage. A "Try the demo" entry on the welcome screen signs in as a demo member, leader, or admin. |
-| Supabase | Removed from the app now and from the website in phase 2. `supabase/life-groups.sql` is deleted. |
+| Topic                   | Decision                                                                                                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AWS stack               | Amplify Gen 2: Cognito (auth), Amplify Data on DynamoDB (API), S3 (storage), Lambda functions for privileged operations.                                                                     |
+| Where the backend lives | `vine-life-groups-app/amplify/`. One backend serves the app and the website. The website receives a copy of `amplify_outputs.json`.                                                          |
+| Roles                   | Cognito groups `LEADERS` and `ADMINS`. Everyone else is a member. `Profile.role` mirrors the group for display and querying.                                                                 |
+| Demo mode               | `EXPO_PUBLIC_BACKEND=demo` (or no `amplify_outputs.json`) selects a local backend in AsyncStorage. A "Try the demo" entry on the welcome screen signs in as a demo member, leader, or admin. |
+| Supabase                | Removed from the app now and from the website in phase 2. `supabase/life-groups.sql` is deleted.                                                                                             |
 
 ## Backend interface (app side)
 
@@ -75,19 +75,19 @@ All group-scoped records carry `groupId` and a denormalised `leaderId`
 (the group's leader at write time). Owner rules on `leaderId` give a
 leader exact access to their own groups.
 
-| Model | Fields | Rules |
-|---|---|---|
-| Profile | id = Cognito sub, fullName, email, phone, role | owner read/update (not `role`); authenticated read `fullName`; ADMINS all |
-| Group | name, description, meetingDay, meetingTime, location, leaderId, isActive | public (API key) + authenticated read; `ownerDefinedIn(leaderId)` update; ADMINS all |
-| JoinRequest | groupId, leaderId, userId, message, status, decidedBy, decidedAt | owner(userId) read; `ownerDefinedIn(leaderId)` read; ADMINS all; writes only via functions |
-| Membership | groupId, leaderId, userId, joinedAt | owner(userId) read; `ownerDefinedIn(leaderId)` read/delete; ADMINS all |
-| Session | groupId, leaderId, sessionDate, topic | `ownerDefinedIn(leaderId)` all; ADMINS all |
-| Attendance | sessionId, groupId, leaderId, userId, status | owner(userId) read; `ownerDefinedIn(leaderId)` all; ADMINS all |
-| Announcement | groupId, leaderId, authorId, title, body | `ownerDefinedIn(leaderId)` all; ADMINS all; members read via `groupPortal` |
-| Document | groupId, leaderId, title, s3Key, mimeType, sizeBytes | `ownerDefinedIn(leaderId)` all; ADMINS all; members read via `groupPortal` |
-| SiteAnnouncement | title, body, eventDate, eventTime, linkUrl, linkLabel, isPinned, isPublished | public read where published (filtered in query); ADMINS all |
-| SiteSetting | key, value | public read; ADMINS all |
-| Subscriber | email | public create; ADMINS read/delete |
+| Model            | Fields                                                                       | Rules                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Profile          | id = Cognito sub, fullName, email, phone, role                               | owner read/update (not `role`); authenticated read `fullName`; ADMINS all                  |
+| Group            | name, description, meetingDay, meetingTime, location, leaderId, isActive     | public (API key) + authenticated read; `ownerDefinedIn(leaderId)` update; ADMINS all       |
+| JoinRequest      | groupId, leaderId, userId, message, status, decidedBy, decidedAt             | owner(userId) read; `ownerDefinedIn(leaderId)` read; ADMINS all; writes only via functions |
+| Membership       | groupId, leaderId, userId, joinedAt                                          | owner(userId) read; `ownerDefinedIn(leaderId)` read/delete; ADMINS all                     |
+| Session          | groupId, leaderId, sessionDate, topic                                        | `ownerDefinedIn(leaderId)` all; ADMINS all                                                 |
+| Attendance       | sessionId, groupId, leaderId, userId, status                                 | owner(userId) read; `ownerDefinedIn(leaderId)` all; ADMINS all                             |
+| Announcement     | groupId, leaderId, authorId, title, body                                     | `ownerDefinedIn(leaderId)` all; ADMINS all; members read via `groupPortal`                 |
+| Document         | groupId, leaderId, title, s3Key, mimeType, sizeBytes                         | `ownerDefinedIn(leaderId)` all; ADMINS all; members read via `groupPortal`                 |
+| SiteAnnouncement | title, body, eventDate, eventTime, linkUrl, linkLabel, isPinned, isPublished | public read where published (filtered in query); ADMINS all                                |
+| SiteSetting      | key, value                                                                   | public read; ADMINS all                                                                    |
+| Subscriber       | email                                                                        | public create; ADMINS read/delete                                                          |
 
 Secondary indexes: `Group.byLeader`, `JoinRequest.byGroup`, `Membership.byGroup`,
 `Membership.byUser`, `Session.byGroup`, `Attendance.bySession`,
@@ -95,20 +95,20 @@ Secondary indexes: `Group.byLeader`, `JoinRequest.byGroup`, `Membership.byGroup`
 
 ### Custom operations (Lambda handlers, authorization checked in code)
 
-| Operation | Who | Does |
-|---|---|---|
-| `requestJoin(groupId, message)` | authenticated | upsert JoinRequest as pending with the group's leaderId |
-| `decideRequest(requestId, approve)` | leader of that group or ADMINS | set status; on approve create Membership |
-| `assignLeader(groupId, userId)` | ADMINS | set Group.leaderId, rewrite leaderId on that group's records, add user to `LEADERS` |
-| `setRole(userId, role)` | ADMINS | add/remove Cognito groups, update Profile.role |
-| `saveAttendance(sessionId, marks[])` | leader of that group or ADMINS | upsert Attendance rows |
-| `groupPortal(groupId)` | member of that group, leader, ADMINS | announcements, documents, sessions with my attendance |
-| `documentUrl(documentId)` | member/leader/ADMINS of that group | presigned S3 GET URL (5 min) |
-| `uploadUrl(groupId, fileName, mimeType)` | leader/ADMINS | presigned S3 PUT URL + key; client then creates Document |
-| `groupReport(groupId)` | leader/ADMINS | per-session and per-member rates |
-| `adminOverview()` | ADMINS | totals + per-group rows |
-| `deleteMyAccount()` | authenticated | delete Cognito user and the caller's records |
-| `feed()` | authenticated | latest announcements across my groups |
+| Operation                                | Who                                  | Does                                                                                |
+| ---------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| `requestJoin(groupId, message)`          | authenticated                        | upsert JoinRequest as pending with the group's leaderId                             |
+| `decideRequest(requestId, approve)`      | leader of that group or ADMINS       | set status; on approve create Membership                                            |
+| `assignLeader(groupId, userId)`          | ADMINS                               | set Group.leaderId, rewrite leaderId on that group's records, add user to `LEADERS` |
+| `setRole(userId, role)`                  | ADMINS                               | add/remove Cognito groups, update Profile.role                                      |
+| `saveAttendance(sessionId, marks[])`     | leader of that group or ADMINS       | upsert Attendance rows                                                              |
+| `groupPortal(groupId)`                   | member of that group, leader, ADMINS | announcements, documents, sessions with my attendance                               |
+| `documentUrl(documentId)`                | member/leader/ADMINS of that group   | presigned S3 GET URL (5 min)                                                        |
+| `uploadUrl(groupId, fileName, mimeType)` | leader/ADMINS                        | presigned S3 PUT URL + key; client then creates Document                            |
+| `groupReport(groupId)`                   | leader/ADMINS                        | per-session and per-member rates                                                    |
+| `adminOverview()`                        | ADMINS                               | totals + per-group rows                                                             |
+| `deleteMyAccount()`                      | authenticated                        | delete Cognito user and the caller's records                                        |
+| `feed()`                                 | authenticated                        | latest announcements across my groups                                               |
 
 Functions use the data client with IAM auth (`allow.resource(fn)`), the
 Cognito admin API for group changes, and the S3 SDK for presigned URLs.

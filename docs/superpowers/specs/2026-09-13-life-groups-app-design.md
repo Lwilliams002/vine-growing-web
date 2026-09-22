@@ -13,13 +13,13 @@ members see their group's announcements and documents; and a super admin
 
 ## Decisions already made
 
-| Topic | Decision |
-|---|---|
-| Stack | Expo SDK 57 (the sibling `../apexcommission-native` is on 55; the simulator's Expo Go required 57), expo-router, NativeWind 4, TanStack Query, supabase-js, EAS builds. |
-| Backend | The website's existing Supabase project (`yyevvpuuvilzdnhefusv`). New tables prefixed `lg_`. |
-| Language | Spanish default with English toggle, same `t(es, en)` API as the website. |
-| Location | Sibling folder `/Users/lezdev/Desktop/Williams/vine-life-groups-app` (own git repo). SQL lives in the website repo at `supabase/life-groups.sql`. |
-| Design | Same tokens as the site: navy background, sky-blue primary, gold accent, Anton display, Inter body, JetBrains Mono eyebrows, square corners, `vine-logo.png`. |
+| Topic    | Decision                                                                                                                                                                |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack    | Expo SDK 57 (the sibling `../apexcommission-native` is on 55; the simulator's Expo Go required 57), expo-router, NativeWind 4, TanStack Query, supabase-js, EAS builds. |
+| Backend  | The website's existing Supabase project (`yyevvpuuvilzdnhefusv`). New tables prefixed `lg_`.                                                                            |
+| Language | Spanish default with English toggle, same `t(es, en)` API as the website.                                                                                               |
+| Location | Sibling folder `/Users/lezdev/Desktop/Williams/vine-life-groups-app` (own git repo). SQL lives in the website repo at `supabase/life-groups.sql`.                       |
+| Design   | Same tokens as the site: navy background, sky-blue primary, gold accent, Anton display, Inter body, JetBrains Mono eyebrows, square corners, `vine-logo.png`.           |
 
 ## Roles
 
@@ -84,17 +84,17 @@ Members read via short-lived signed URLs.
 
 ### RLS summary
 
-| Table | anon | member | leader (own groups) | super_admin |
-|---|---|---|---|---|
-| profiles | – | own row read/update | read members of own groups | read all, update role via RPC |
-| lg_groups | read active | read active | read active, update own | all |
-| lg_join_requests | – | insert/read/update own | read + decide via RPC | all |
-| lg_memberships | – | read own | read own groups | all |
-| lg_sessions | – | read own groups | CRUD own groups | all |
-| lg_attendance | – | read own rows | CRUD own groups | all |
-| lg_announcements | – | read own groups | CRUD own groups | all |
-| lg_documents | – | read own groups | CRUD own groups | all |
-| storage `lg-documents` | – | read own groups' paths | write own groups' paths | all |
+| Table                  | anon        | member                 | leader (own groups)        | super_admin                   |
+| ---------------------- | ----------- | ---------------------- | -------------------------- | ----------------------------- |
+| profiles               | –           | own row read/update    | read members of own groups | read all, update role via RPC |
+| lg_groups              | read active | read active            | read active, update own    | all                           |
+| lg_join_requests       | –           | insert/read/update own | read + decide via RPC      | all                           |
+| lg_memberships         | –           | read own               | read own groups            | all                           |
+| lg_sessions            | –           | read own groups        | CRUD own groups            | all                           |
+| lg_attendance          | –           | read own rows          | CRUD own groups            | all                           |
+| lg_announcements       | –           | read own groups        | CRUD own groups            | all                           |
+| lg_documents           | –           | read own groups        | CRUD own groups            | all                           |
+| storage `lg-documents` | –           | read own groups' paths | write own groups' paths    | all                           |
 
 ### Website hardening (same SQL file)
 

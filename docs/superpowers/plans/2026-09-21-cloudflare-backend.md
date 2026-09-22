@@ -26,6 +26,7 @@
 **Files:** `api/package.json`, `api/wrangler.jsonc`, `api/tsconfig.json`, `api/vitest.config.ts`, `api/migrations/0001_init.sql`, `api/src/lib/auth.ts`, `api/src/lib/db.ts`, `api/src/lib/errors.ts`, `api/src/index.ts` (health route), `api/test/auth.test.ts`
 
 **Interfaces (Produces):**
+
 - `hashPassword(pw): Promise<{hash, salt}>`, `verifyPassword(pw, hash, salt): Promise<boolean>` (PBKDF2-SHA256, 100 000 iterations, 32-byte salt, base64).
 - `createSession(db, userId): Promise<string token>`; `userFromToken(db, token): Promise<User|null>`; `revokeSession(db, token)`.
 - `signFileToken(secret, documentId, expiresAt)`, `verifyFileToken(secret, token): documentId|null` (HMAC-SHA256).

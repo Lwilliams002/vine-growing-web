@@ -14,16 +14,16 @@ settings, subscribers and `/admin` onto the same API and database.
 
 ## Decisions
 
-| Topic | Decision |
-|---|---|
-| Compute | One Cloudflare Worker, Hono router, TypeScript. Lives in the app repo at `vine-life-groups-app/api/`. |
-| Database | D1 (SQLite). Plain SQL migrations in `api/migrations/`, prepared statements, no ORM. |
-| Files | R2 bucket `vine-lg-documents`. Uploads and downloads go through the Worker, so no S3 keys or presigned URLs are needed. |
-| Auth | Hand-rolled email + password: PBKDF2-SHA256 (100k iterations, WebCrypto) password hashes, random bearer session tokens stored hashed, 90-day expiry. No email verification for now (Resend can be added later for codes and password reset). |
-| Roles | `users.role` = member / leader / super_admin. First super admin is set with one SQL statement; after that the People screen. |
-| URL | `https://api.thevineapostolic.com` (custom domain route on the Worker). |
-| App | New `src/lib/backend/cloudflare/index.ts` implementing `Backend` over fetch. `EXPO_PUBLIC_BACKEND=cloudflare` and `EXPO_PUBLIC_API_URL` select it. The Amplify backend and `amplify/` folder are deleted. |
-| Tests | Vitest with `@cloudflare/vitest-pool-workers`: the API runs against a real local D1 and R2 in tests; the role rules are asserted the same way the demo backend tests do. |
+| Topic    | Decision                                                                                                                                                                                                                                     |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Compute  | One Cloudflare Worker, Hono router, TypeScript. Lives in the app repo at `vine-life-groups-app/api/`.                                                                                                                                        |
+| Database | D1 (SQLite). Plain SQL migrations in `api/migrations/`, prepared statements, no ORM.                                                                                                                                                         |
+| Files    | R2 bucket `vine-lg-documents`. Uploads and downloads go through the Worker, so no S3 keys or presigned URLs are needed.                                                                                                                      |
+| Auth     | Hand-rolled email + password: PBKDF2-SHA256 (100k iterations, WebCrypto) password hashes, random bearer session tokens stored hashed, 90-day expiry. No email verification for now (Resend can be added later for codes and password reset). |
+| Roles    | `users.role` = member / leader / super_admin. First super admin is set with one SQL statement; after that the People screen.                                                                                                                 |
+| URL      | `https://api.thevineapostolic.com` (custom domain route on the Worker).                                                                                                                                                                      |
+| App      | New `src/lib/backend/cloudflare/index.ts` implementing `Backend` over fetch. `EXPO_PUBLIC_BACKEND=cloudflare` and `EXPO_PUBLIC_API_URL` select it. The Amplify backend and `amplify/` folder are deleted.                                    |
+| Tests    | Vitest with `@cloudflare/vitest-pool-workers`: the API runs against a real local D1 and R2 in tests; the role rules are asserted the same way the demo backend tests do.                                                                     |
 
 ## Why hand-rolled auth
 
@@ -59,22 +59,22 @@ All routes return JSON; errors are `{ error: code, message }` with codes
 `not_signed_in` (401), `not_allowed` (403), `not_found` (404), `invalid` (400).
 Authenticated routes read `Authorization: Bearer <token>`.
 
-| Route | Who | Backend method |
-|---|---|---|
-| POST /auth/sign-up, /auth/sign-in, /auth/sign-out, DELETE /auth/account, GET /auth/me | – / user | auth.* |
-| GET/PATCH /me | user | me.getProfile / updateProfile |
-| GET /groups, GET /groups/:id | anyone | groups.listActive / get |
-| GET /groups/mine, GET /groups/led | user | groups.listMine / listLed |
-| POST /groups, PATCH /groups/:id, PUT /groups/:id/leader | super_admin | groups.upsert / assignLeader |
-| GET /requests/mine, POST /groups/:id/requests | user | requests.mine / requestJoin |
-| GET /requests/pending, POST /requests/:id/decide | leader/admin | requests.pendingForLeader / decide |
-| GET /groups/:id/members, DELETE /memberships/:id | leader/admin | members.* |
-| GET /groups/:id/sessions, PUT /groups/:id/sessions (ensure), GET /sessions/:id/attendance, PUT /sessions/:id/attendance | leader/admin | sessions.* |
-| GET /groups/:id/attendance/mine | member | sessions.myAttendance |
-| GET /groups/:id/announcements (member/leader), GET /announcements/feed, POST /groups/:id/announcements, DELETE /announcements/:id | | announcements.* |
-| GET /groups/:id/documents, POST /groups/:id/documents (multipart), GET /documents/:id/url, GET /documents/:id/file?t=, DELETE /documents/:id | | documents.* |
-| GET /groups/:id/report, GET /stats/groups, GET /stats/overview | leader/admin, admin | stats.* |
-| GET /people?q=, PUT /people/:id/role | super_admin | people.* |
+| Route                                                                                                                                        | Who                 | Backend method                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ---------------------------------- |
+| POST /auth/sign-up, /auth/sign-in, /auth/sign-out, DELETE /auth/account, GET /auth/me                                                        | – / user            | auth.*                             |
+| GET/PATCH /me                                                                                                                                | user                | me.getProfile / updateProfile      |
+| GET /groups, GET /groups/:id                                                                                                                 | anyone              | groups.listActive / get            |
+| GET /groups/mine, GET /groups/led                                                                                                            | user                | groups.listMine / listLed          |
+| POST /groups, PATCH /groups/:id, PUT /groups/:id/leader                                                                                      | super_admin         | groups.upsert / assignLeader       |
+| GET /requests/mine, POST /groups/:id/requests                                                                                                | user                | requests.mine / requestJoin        |
+| GET /requests/pending, POST /requests/:id/decide                                                                                             | leader/admin        | requests.pendingForLeader / decide |
+| GET /groups/:id/members, DELETE /memberships/:id                                                                                             | leader/admin        | members.*                          |
+| GET /groups/:id/sessions, PUT /groups/:id/sessions (ensure), GET /sessions/:id/attendance, PUT /sessions/:id/attendance                      | leader/admin        | sessions.*                         |
+| GET /groups/:id/attendance/mine                                                                                                              | member              | sessions.myAttendance              |
+| GET /groups/:id/announcements (member/leader), GET /announcements/feed, POST /groups/:id/announcements, DELETE /announcements/:id            |                     | announcements.*                    |
+| GET /groups/:id/documents, POST /groups/:id/documents (multipart), GET /documents/:id/url, GET /documents/:id/file?t=, DELETE /documents/:id |                     | documents.*                        |
+| GET /groups/:id/report, GET /stats/groups, GET /stats/overview                                                                               | leader/admin, admin | stats.*                            |
+| GET /people?q=, PUT /people/:id/role                                                                                                         | super_admin         | people.*                           |
 
 Document downloads: `/documents/:id/url` returns a link to
 `/documents/:id/file?t=<HMAC token, 5 min>`; the file route verifies the token

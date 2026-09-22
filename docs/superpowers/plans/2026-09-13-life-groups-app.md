@@ -27,9 +27,11 @@
 ## File map
 
 **Website repo (`vine-growing-web`)**
+
 - `supabase/life-groups.sql` — profiles, `lg_*` tables, helpers, RLS, RPCs, views, storage bucket + policies, website policy hardening. Idempotent (`if not exists` / `drop ... if exists`).
 
 **App repo (`vine-life-groups-app`)**
+
 - `package.json`, `app.json`, `eas.json`, `babel.config.js`, `metro.config.js`, `tailwind.config.js`, `global.css`, `nativewind-env.d.ts`, `tsconfig.json`, `jest.config.js`, `.env.example`, `.gitignore`, `README.md`
 - `assets/icon.png`, `assets/splash-icon.png`, `assets/adaptive-icon.png` — logo on navy
 - `src/assets/vine-logo.png` — copied from the website
@@ -57,9 +59,11 @@
 ### Task 1: Database schema, RLS, RPCs, views (website repo)
 
 **Files:**
+
 - Create: `vine-growing-web/supabase/life-groups.sql`
 
 **Interfaces:**
+
 - Produces: tables `profiles`, `lg_groups`, `lg_join_requests`, `lg_memberships`, `lg_sessions`, `lg_attendance`, `lg_announcements`, `lg_documents`; functions `lg_role()`, `lg_is_leader_of(uuid)`, `lg_is_member_of(uuid)`, `lg_decide_request(uuid, boolean)`, `lg_set_role(uuid, text)`, `lg_assign_leader(uuid, uuid)`, `lg_delete_my_account()`; views `lg_session_stats`, `lg_member_stats`, `lg_group_stats`; bucket `lg-documents`.
 
 - [ ] **Step 1: Write the SQL file**
@@ -517,9 +521,11 @@ git commit -m "Add Life Groups schema, RLS, RPCs, reports, and site policy harde
 ### Task 2: Scaffold the Expo app
 
 **Files:**
+
 - Create: `vine-life-groups-app/package.json`, `app.json`, `eas.json`, `babel.config.js`, `metro.config.js`, `tailwind.config.js`, `global.css`, `nativewind-env.d.ts`, `tsconfig.json`, `jest.config.js`, `.gitignore`, `.env.example`, `README.md`, `src/assets/vine-logo.png`, `assets/icon.png`, `assets/splash-icon.png`, `assets/adaptive-icon.png`
 
 **Interfaces:**
+
 - Produces: a runnable Expo project with `npx jest` and `npx expo start` working.
 
 - [ ] **Step 1: Create the folder and package.json**
@@ -595,6 +601,7 @@ Then run `npx expo install --fix` so every Expo package lands on the SDK 55 vers
 - [ ] **Step 2: Config files**
 
 `app.json`:
+
 ```json
 {
   "expo": {
@@ -606,7 +613,11 @@ Then run `npx expo install --fix` so every Expo package lands on the SDK 55 vers
     "scheme": "vinelifegroups",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
-    "splash": { "image": "./assets/splash-icon.png", "resizeMode": "contain", "backgroundColor": "#060a13" },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#060a13"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "org.thevinehouston.lifegroups",
@@ -616,7 +627,10 @@ Then run `npx expo install --fix` so every Expo package lands on the SDK 55 vers
     "android": {
       "package": "org.thevinehouston.lifegroups",
       "versionCode": 1,
-      "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#060a13" }
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#060a13"
+      }
     },
     "plugins": ["expo-router", "expo-font", "expo-document-picker", "expo-web-browser"],
     "experiments": { "typedRoutes": true }
@@ -625,11 +639,16 @@ Then run `npx expo install --fix` so every Expo package lands on the SDK 55 vers
 ```
 
 `eas.json`:
+
 ```json
 {
   "cli": { "version": ">= 16.0.0", "appVersionSource": "local" },
   "build": {
-    "development": { "developmentClient": true, "distribution": "internal", "ios": { "simulator": true } },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": { "simulator": true }
+    },
     "preview": { "distribution": "internal" },
     "production": { "autoIncrement": true }
   },
@@ -638,6 +657,7 @@ Then run `npx expo install --fix` so every Expo package lands on the SDK 55 vers
 ```
 
 `babel.config.js`:
+
 ```js
 module.exports = function (api) {
   api.cache(true);
@@ -648,6 +668,7 @@ module.exports = function (api) {
 ```
 
 `metro.config.js`:
+
 ```js
 const { getDefaultConfig } = require("expo/metro-config");
 const { withNativeWind } = require("nativewind/metro");
@@ -656,6 +677,7 @@ module.exports = withNativeWind(config, { input: "./global.css" });
 ```
 
 `tailwind.config.js`:
+
 ```js
 const { colors } = require("./src/lib/theme.colors");
 /** @type {import('tailwindcss').Config} */
@@ -692,6 +714,7 @@ module.exports = {
 ```
 
 `src/lib/theme.colors.js` (CommonJS so tailwind can require it):
+
 ```js
 module.exports.colors = {
   background: "#060a13",
@@ -714,6 +737,7 @@ module.exports.colors = {
 `nativewind-env.d.ts`: `/// <reference types="nativewind/types" />`
 
 `tsconfig.json`:
+
 ```json
 {
   "extends": "expo/tsconfig.base",
@@ -723,6 +747,7 @@ module.exports.colors = {
 ```
 
 `jest.config.js`:
+
 ```js
 module.exports = {
   preset: "jest-expo",
@@ -734,9 +759,10 @@ module.exports = {
 };
 ```
 
-`.gitignore`: node_modules/, .expo/, dist/, ios/, android/, .env, *.orig.*, .DS_Store
+`.gitignore`: node_modules/, .expo/, dist/, ios/, android/, .env, _.orig._, .DS_Store
 
 `.env.example`:
+
 ```
 EXPO_PUBLIC_SUPABASE_URL=https://yyevvpuuvilzdnhefusv.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=
@@ -749,9 +775,11 @@ Copy `vine-growing-web/src/assets/vine-logo.png` to `src/assets/vine-logo.png`. 
 - [ ] **Step 4: Smoke test the toolchain**
 
 Add `__tests__/smoke.test.ts`:
+
 ```ts
 test("jest runs", () => expect(1 + 1).toBe(2));
 ```
+
 Run: `npx jest` → PASS. Run: `npx tsc --noEmit` → no errors (there is no app code yet).
 
 - [ ] **Step 5: git init and commit**
@@ -765,10 +793,12 @@ cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && git init -q && git add
 ### Task 3: Theme, utils, and UI primitives
 
 **Files:**
+
 - Create: `src/lib/theme.ts`, `src/lib/utils.ts`, `src/components/ui/Text.tsx`, `Button.tsx`, `Input.tsx`, `Card.tsx`, `Badge.tsx`, `Avatar.tsx`, `Empty.tsx`, `Loading.tsx`, `Screen.tsx`, `src/components/Logo.tsx`
 - Test: `__tests__/utils.test.ts`
 
 **Interfaces:**
+
 - Produces: `colors`, `fonts` from theme; `cn(...classes)`, `initials(name)`, `formatDate(iso, lang)`; components `<Screen scroll? padded?>`, `<Display>`, `<Eyebrow>`, `<Body muted? size?>`, `<Button title onPress variant="primary"|"secondary"|"ghost"|"destructive" loading? disabled?>`, `<Input label error ...TextInputProps>`, `<Card>`, `<Badge tone="primary"|"accent"|"muted"|"destructive">`, `<Avatar name size?>`, `<Empty title body?>`, `<Loading/>`, `<Logo size?>`.
 
 - [ ] **Step 1: Failing tests for utils**
@@ -785,17 +815,28 @@ test("formatDate by language", () => {
   expect(formatDate("2026-09-13", "es")).toBe("13 sept 2026");
 });
 ```
+
 Run `npx jest utils` → FAIL (module missing).
 
 - [ ] **Step 2: Implement theme and utils**
 
 `src/lib/theme.ts`:
+
 ```ts
 import { colors as raw } from "./theme.colors";
 export const colors = raw as {
-  background: string; surfaceDeep: string; card: string; secondary: string; border: string;
-  input: string; foreground: string; mutedForeground: string; primary: string;
-  primaryForeground: string; accent: string; destructive: string;
+  background: string;
+  surfaceDeep: string;
+  card: string;
+  secondary: string;
+  border: string;
+  input: string;
+  foreground: string;
+  mutedForeground: string;
+  primary: string;
+  primaryForeground: string;
+  accent: string;
+  destructive: string;
 };
 export const fonts = {
   display: "Anton_400Regular",
@@ -811,22 +852,30 @@ export const DAYS = {
 ```
 
 `src/lib/utils.ts`:
+
 ```ts
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, parseISO } from "date-fns";
 import { es as esLocale } from "date-fns/locale";
-export function cn(...inputs: ClassValue[]) { return twMerge(clsx(inputs)); }
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 export function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
-  return parts.slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]!.toUpperCase())
+    .join("");
 }
 export function formatDate(iso: string, lang: "es" | "en"): string {
   const d = iso.length === 10 ? parseISO(iso) : new Date(iso);
   return lang === "es" ? format(d, "d MMM yyyy", { locale: esLocale }) : format(d, "MMM d, yyyy");
 }
-export function todayIso(): string { return new Date().toISOString().slice(0, 10); }
+export function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 ```
 
 - [ ] **Step 3: Implement primitives** (StyleSheet-free; NativeWind classes)
@@ -853,10 +902,12 @@ export function todayIso(): string { return new Date().toISOString().slice(0, 10
 ### Task 4: i18n, roles, stats, csv, validation (pure logic, TDD)
 
 **Files:**
+
 - Create: `src/lib/i18n.tsx`, `src/lib/roles.ts`, `src/lib/stats.ts`, `src/lib/csv.ts`, `src/lib/validation.ts`
 - Test: `__tests__/i18n.test.tsx`, `roles.test.ts`, `stats.test.ts`, `csv.test.ts`, `validation.test.ts`
 
 **Interfaces:**
+
 - Produces: `LanguageProvider`, `useLang(): { lang, setLang, t }` where `t(es, en)` returns a string; `Role = "member"|"leader"|"super_admin"`; `tabsForRole(role, leadsAnyGroup): TabKey[]` with `TabKey = "home"|"groups"|"lead"|"admin"|"profile"`; `attendanceRate(present, total): number` (0–100 int); `summarizeSessions(rows: {present:number; absent:number}[]): {sessions:number; avgRate:number}`; `toCsv(headers: string[], rows: (string|number|null)[][]): string`; zod schemas `signUpSchema`, `signInSchema`, `groupSchema`, `announcementSchema`, `profileSchema`.
 
 - [ ] **Step 1: Write the failing tests**
@@ -898,6 +949,7 @@ test("defaults to Spanish", async () => {
   expect(await screen.findByText("Hola")).toBeTruthy();
 });
 ```
+
 Run `npx jest` → all FAIL (modules missing).
 
 - [ ] **Step 2: Implement**
@@ -905,6 +957,7 @@ Run `npx jest` → all FAIL (modules missing).
 `src/lib/i18n.tsx`: context with `lang` state default `"es"`, on mount read AsyncStorage key `vine-lang`; `setLang` writes it; `t` overloads like the website. Mock AsyncStorage in tests via `jest.mock("@react-native-async-storage/async-storage", () => require("@react-native-async-storage/async-storage/jest/async-storage-mock"))` placed in `jest.setup.js` (add `setupFiles: ["<rootDir>/jest.setup.js"]` to jest config).
 
 `src/lib/roles.ts`:
+
 ```ts
 export type Role = "member" | "leader" | "super_admin";
 export type TabKey = "home" | "groups" | "lead" | "admin" | "profile";
@@ -918,6 +971,7 @@ export function tabsForRole(role: Role, leadsAnyGroup: boolean): TabKey[] {
 ```
 
 `src/lib/stats.ts`:
+
 ```ts
 export function attendanceRate(present: number, total: number): number {
   return total === 0 ? 0 : Math.round((present / total) * 100);
@@ -925,11 +979,15 @@ export function attendanceRate(present: number, total: number): number {
 export function summarizeSessions(rows: { present: number; absent: number }[]) {
   if (rows.length === 0) return { sessions: 0, avgRate: 0 };
   const rates = rows.map((r) => attendanceRate(r.present, r.present + r.absent));
-  return { sessions: rows.length, avgRate: Math.round(rates.reduce((a, b) => a + b, 0) / rates.length) };
+  return {
+    sessions: rows.length,
+    avgRate: Math.round(rates.reduce((a, b) => a + b, 0) / rates.length),
+  };
 }
 ```
 
 `src/lib/csv.ts`:
+
 ```ts
 function cell(v: string | number | null): string {
   if (v === null || v === undefined) return "";
@@ -951,9 +1009,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 5: Supabase client, types, AuthContext
 
 **Files:**
+
 - Create: `src/integrations/supabase/client.ts`, `src/integrations/supabase/types.ts`, `src/contexts/AuthContext.tsx`
 
 **Interfaces:**
+
 - Produces: `supabase` (typed client, `isSupabaseConfigured` boolean); `Database` type with Row types for all `lg_*` tables, `profiles`, the three views, and the RPC `Functions`; `useAuth(): { session, user, profile: Profile | null, role: Role, loading, leadsAnyGroup, signIn(email,pw), signUp({fullName,email,phone,password}), signOut(), refreshProfile() }`; type `Profile = Database["public"]["Tables"]["profiles"]["Row"]`.
 
 - [ ] **Step 1: client.ts** — same as the sibling app (AsyncStorage storage, persistSession, no URL detection) plus `export const isSupabaseConfigured = Boolean(URL && KEY)`.
@@ -967,9 +1027,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 6: Query layer
 
 **Files:**
+
 - Create: `src/lib/queries/groups.ts`, `requests.ts`, `memberships.ts`, `sessions.ts`, `announcements.ts`, `documents.ts`, `stats.ts`, `people.ts`, `src/lib/queries/keys.ts`
 
 **Interfaces (all hooks use TanStack Query; mutations invalidate the listed keys):**
+
 - `keys`: `groups.all`, `groups.one(id)`, `groups.mine(uid)`, `requests.mine(uid)`, `requests.forLeader(uid)`, `members(groupId)`, `sessions(groupId)`, `attendance(sessionId)`, `announcements(groupId)`, `announcementsFeed(uid)`, `documents(groupId)`, `stats.group(groupId)`, `stats.members(groupId)`, `stats.all`, `people.all`.
 - `groups.ts`: `useActiveGroups()` → `Group[]` with `leader: { full_name } | null` (select `*, leader:profiles!lg_groups_leader_id_fkey(full_name)`), `useGroup(id)`, `useMyGroups(uid)` (memberships joined to groups), `useLedGroups(uid)`, `useUpsertGroup()` (insert or update), `useAssignLeader()` (rpc).
 - `requests.ts`: `useMyRequests(uid)` → map `group_id → status`; `useRequestJoin()` mutation `{ groupId, message }` doing upsert on `(group_id,user_id)` with `status: "pending"`; `usePendingRequestsForLeader(uid)` → requests with `profile:profiles(full_name, phone, email)` and `group:lg_groups(name)` where `status = pending` and group leader is uid (select via `lg_groups!inner(leader_id)` filter `group.leader_id = uid`); `useDecideRequest()` → rpc `lg_decide_request`.
@@ -989,9 +1051,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 7: Root layout, gate, and public screens
 
 **Files:**
+
 - Create: `app/_layout.tsx`, `app/index.tsx`, `app/+not-found.tsx`, `app/(public)/_layout.tsx`, `app/(public)/welcome.tsx`, `app/(public)/groups.tsx`, `app/(public)/group/[id].tsx`, `app/(public)/sign-in.tsx`, `app/(public)/sign-up.tsx`, `src/components/GroupCard.tsx`, `src/components/LangToggle.tsx`
 
 **Behavior:**
+
 - `_layout.tsx`: load fonts with `useFonts` (Anton, Inter 400/500/600, JetBrains Mono), keep splash until loaded; providers: SafeArea → QueryClient → LanguageProvider → AuthProvider; `<Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>`; `<Toast/>`; StatusBar light. If `!isSupabaseConfigured` render a full-screen notice "Falta configurar Supabase / Supabase is not configured" instead of the Stack.
 - `index.tsx`: while `loading` show `<Loading/>`; then `<Redirect href={session ? "/(app)/home" : "/(public)/welcome"} />`.
 - `welcome.tsx`: Logo 120, Eyebrow "The Vine Apostolic Church", Display "Grupos de Vida / Life Groups", Body muted intro, Button primary "Explorar grupos / Browse groups" → `/(public)/groups`, Button secondary "Iniciar sesión / Sign in", ghost "Crear cuenta / Create account". LangToggle top-right.
@@ -1011,9 +1075,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 8: Signed-in shell, member portal, profile
 
 **Files:**
+
 - Create: `app/(app)/_layout.tsx`, `app/(app)/home.tsx`, `app/(app)/groups/index.tsx`, `app/(app)/groups/[id].tsx`, `app/(app)/group/[id]/_layout.tsx`, `app/(app)/group/[id]/index.tsx`, `app/(app)/group/[id]/documents.tsx`, `app/(app)/group/[id]/attendance.tsx`, `app/(app)/profile.tsx`, `src/components/AnnouncementCard.tsx`, `src/components/DocumentRow.tsx`, `src/components/StatTile.tsx`
 
 **Behavior:**
+
 - `(app)/_layout.tsx`: if no session `<Redirect href="/(public)/welcome"/>`. `Tabs` with `tabBarStyle` bg `surfaceDeep`, border-top `border`, active tint primary, inactive muted, labels in Inter 500 uppercase 10px. Tabs from `tabsForRole(role, leadsAnyGroup)`; hidden tabs get `href: null`. Icons (lucide): Home, Users, ClipboardList (lead), Shield (admin), User (profile). Non-tab routes (`group/[id]`, `groups/[id]`, `lead/[groupId]/*`, `admin/*` sub-screens) registered with `href: null`.
 - `home.tsx`: greeting Display with first name; "Mis grupos / My groups" list of `useMyGroups(uid)` → `/(app)/group/[id]`; "Anuncios recientes / Recent announcements" from `useAnnouncementsFeed(uid)` (AnnouncementCard with group name badge); if no groups, Empty with button to Groups tab.
 - `groups/index.tsx`: browse all active groups with status badge from `useMyRequests` + membership; tap → `groups/[id]`.
@@ -1036,9 +1102,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 9: Leader screens
 
 **Files:**
+
 - Create: `app/(app)/lead/index.tsx`, `app/(app)/lead/requests.tsx`, `app/(app)/lead/[groupId]/_layout.tsx`, `app/(app)/lead/[groupId]/index.tsx`, `app/(app)/lead/[groupId]/attendance.tsx`, `app/(app)/lead/[groupId]/post.tsx`, `app/(app)/lead/[groupId]/upload.tsx`, `app/(app)/lead/[groupId]/report.tsx`, `src/components/RequestRow.tsx`, `src/components/MemberRow.tsx`
 
 **Behavior:**
+
 - `lead/index.tsx`: header "Liderazgo / Leading"; pending-requests StatTile linking to `lead/requests`; list of `useLedGroups(uid)` with members count → `lead/[groupId]`.
 - `lead/requests.tsx`: `usePendingRequestsForLeader(uid)` as `RequestRow` (Avatar, name, phone, group name, message, Approve/Decline buttons calling `useDecideRequest`). Empty state.
 - `lead/[groupId]/_layout.tsx`: header with group name + segmented links: Grupo, Asistencia, Reporte.
@@ -1057,9 +1125,11 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 10: Super admin screens
 
 **Files:**
+
 - Create: `app/(app)/admin/index.tsx`, `app/(app)/admin/groups.tsx`, `app/(app)/admin/group-form.tsx`, `app/(app)/admin/people.tsx`, `app/(app)/admin/reports.tsx`
 
 **Behavior:**
+
 - `admin/index.tsx` (Dashboard tab): StatTiles: groups, members (distinct memberships), leaders, pending requests, average attendance (mean of `avg_rate` over groups with sessions). Links: Groups, People, Reports.
 - `admin/groups.tsx`: all groups (incl. inactive with Badge) from `useAllGroupStats`; tap → `group-form?id=`; FAB-style Button "Nuevo grupo / New group" → `group-form`.
 - `admin/group-form.tsx`: fields name, description, meeting day (7 chips), time, location, is_active switch, leader picker (searchable list from `usePeople`, shows current leader) → `useUpsertGroup` then `useAssignLeader` if leader changed.
@@ -1075,6 +1145,7 @@ export function toCsv(headers: string[], rows: (string | number | null)[][]): st
 ### Task 11: README, memory notes, final verification
 
 **Files:**
+
 - Create: `vine-life-groups-app/README.md`
 - Modify: memory index in the Claude memory directory (project notes about the app)
 

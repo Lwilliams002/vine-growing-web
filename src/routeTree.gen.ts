@@ -18,6 +18,7 @@ import { Route as GivingRouteImport } from './routes/giving'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as MinistriesRouteImport } from './routes/ministries'
 import { Route as PrayerRouteImport } from './routes/prayer'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SermonsRouteImport } from './routes/sermons'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +66,11 @@ const PrayerRoute = PrayerRouteImport.update({
   path: '/prayer',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SermonsRoute = SermonsRouteImport.update({
   id: '/sermons',
   path: '/sermons',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/live': typeof LiveRoute
   '/ministries': typeof MinistriesRoute
   '/prayer': typeof PrayerRoute
+  '/privacy': typeof PrivacyRoute
   '/sermons': typeof SermonsRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/live': typeof LiveRoute
   '/ministries': typeof MinistriesRoute
   '/prayer': typeof PrayerRoute
+  '/privacy': typeof PrivacyRoute
   '/sermons': typeof SermonsRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/live': typeof LiveRoute
   '/ministries': typeof MinistriesRoute
   '/prayer': typeof PrayerRoute
+  '/privacy': typeof PrivacyRoute
   '/sermons': typeof SermonsRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/ministries'
     | '/prayer'
+    | '/privacy'
     | '/sermons'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/ministries'
     | '/prayer'
+    | '/privacy'
     | '/sermons'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/ministries'
     | '/prayer'
+    | '/privacy'
     | '/sermons'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   LiveRoute: typeof LiveRoute
   MinistriesRoute: typeof MinistriesRoute
   PrayerRoute: typeof PrayerRoute
+  PrivacyRoute: typeof PrivacyRoute
   SermonsRoute: typeof SermonsRoute
 }
 
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sermons': {
       id: '/sermons'
       path: '/sermons'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveRoute: LiveRoute,
   MinistriesRoute: MinistriesRoute,
   PrayerRoute: PrayerRoute,
+  PrivacyRoute: PrivacyRoute,
   SermonsRoute: SermonsRoute,
 }
 export const routeTree = rootRouteImport

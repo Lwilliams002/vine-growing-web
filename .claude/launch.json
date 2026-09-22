@@ -4,14 +4,7 @@
     {
       "name": "vine-dev",
       "runtimeExecutable": "bun",
-      "runtimeArgs": [
-        "run",
-        "dev",
-        "--",
-        "--port",
-        "8090",
-        "--strictPort"
-      ],
+      "runtimeArgs": ["run", "dev", "--", "--port", "8090", "--strictPort"],
       "port": 8090
     },
     {

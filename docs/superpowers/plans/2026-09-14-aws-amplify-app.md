@@ -42,32 +42,145 @@
 ### Task 1: Backend types and interface
 
 **Files:**
+
 - Create: `src/lib/backend/types.ts`, `src/lib/backend/errors.ts`
 
 **Interfaces (Produces):**
 
 ```ts
 export type Role = "member" | "leader" | "super_admin";
-export type Profile = { id: string; fullName: string; email: string; phone: string; role: Role; createdAt: string };
-export type Group = { id: string; name: string; description: string; meetingDay: number | null; meetingTime: string; location: string; leaderId: string | null; isActive: boolean; createdAt: string; leader?: { fullName: string; phone: string } | null };
+export type Profile = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  role: Role;
+  createdAt: string;
+};
+export type Group = {
+  id: string;
+  name: string;
+  description: string;
+  meetingDay: number | null;
+  meetingTime: string;
+  location: string;
+  leaderId: string | null;
+  isActive: boolean;
+  createdAt: string;
+  leader?: { fullName: string; phone: string } | null;
+};
 export type RequestStatus = "pending" | "approved" | "declined";
-export type JoinRequest = { id: string; groupId: string; leaderId: string | null; userId: string; message: string; status: RequestStatus; decidedBy: string | null; decidedAt: string | null; createdAt: string };
-export type PendingRequest = JoinRequest & { profile: { fullName: string; phone: string; email: string } | null; group: { name: string } | null };
-export type Membership = { id: string; groupId: string; leaderId: string | null; userId: string; joinedAt: string };
-export type Member = Membership & { profile: { fullName: string; phone: string; email: string } | null };
-export type Session = { id: string; groupId: string; sessionDate: string; topic: string; createdAt: string };
+export type JoinRequest = {
+  id: string;
+  groupId: string;
+  leaderId: string | null;
+  userId: string;
+  message: string;
+  status: RequestStatus;
+  decidedBy: string | null;
+  decidedAt: string | null;
+  createdAt: string;
+};
+export type PendingRequest = JoinRequest & {
+  profile: { fullName: string; phone: string; email: string } | null;
+  group: { name: string } | null;
+};
+export type Membership = {
+  id: string;
+  groupId: string;
+  leaderId: string | null;
+  userId: string;
+  joinedAt: string;
+};
+export type Member = Membership & {
+  profile: { fullName: string; phone: string; email: string } | null;
+};
+export type Session = {
+  id: string;
+  groupId: string;
+  sessionDate: string;
+  topic: string;
+  createdAt: string;
+};
 export type AttendanceStatus = "present" | "absent";
-export type Announcement = { id: string; groupId: string; authorId: string | null; title: string; body: string; createdAt: string; group?: { name: string } | null };
-export type Document = { id: string; groupId: string; title: string; storagePath: string; mimeType: string; sizeBytes: number; createdAt: string };
-export type SessionStats = { sessionId: string; groupId: string; sessionDate: string; topic: string; present: number; absent: number; members: number; rate: number };
-export type MemberStats = { groupId: string; userId: string; fullName: string; phone: string; joinedAt: string; sessions: number; present: number; rate: number };
-export type GroupStats = { groupId: string; name: string; leaderId: string | null; leaderName: string | null; isActive: boolean; members: number; pending: number; sessions: number; lastSession: string | null; avgRate: number };
-export type Overview = { groups: number; activeGroups: number; members: number; leaders: number; pending: number; avgRate: number };
+export type Announcement = {
+  id: string;
+  groupId: string;
+  authorId: string | null;
+  title: string;
+  body: string;
+  createdAt: string;
+  group?: { name: string } | null;
+};
+export type Document = {
+  id: string;
+  groupId: string;
+  title: string;
+  storagePath: string;
+  mimeType: string;
+  sizeBytes: number;
+  createdAt: string;
+};
+export type SessionStats = {
+  sessionId: string;
+  groupId: string;
+  sessionDate: string;
+  topic: string;
+  present: number;
+  absent: number;
+  members: number;
+  rate: number;
+};
+export type MemberStats = {
+  groupId: string;
+  userId: string;
+  fullName: string;
+  phone: string;
+  joinedAt: string;
+  sessions: number;
+  present: number;
+  rate: number;
+};
+export type GroupStats = {
+  groupId: string;
+  name: string;
+  leaderId: string | null;
+  leaderName: string | null;
+  isActive: boolean;
+  members: number;
+  pending: number;
+  sessions: number;
+  lastSession: string | null;
+  avgRate: number;
+};
+export type Overview = {
+  groups: number;
+  activeGroups: number;
+  members: number;
+  leaders: number;
+  pending: number;
+  avgRate: number;
+};
 export type MySessionAttendance = Session & { status: AttendanceStatus | null };
 export type AuthUser = { id: string; email: string; role: Role };
 export type SignUpInput = { fullName: string; email: string; phone: string; password: string };
-export type GroupInput = { id?: string; name: string; description: string; meetingDay: number | null; meetingTime: string; location: string; isActive: boolean };
-export type UploadInput = { groupId: string; title: string; uri: string; name: string; mimeType: string; size: number };
+export type GroupInput = {
+  id?: string;
+  name: string;
+  description: string;
+  meetingDay: number | null;
+  meetingTime: string;
+  location: string;
+  isActive: boolean;
+};
+export type UploadInput = {
+  groupId: string;
+  title: string;
+  uri: string;
+  name: string;
+  mimeType: string;
+  size: number;
+};
 
 export interface Backend {
   mode: "demo" | "amplify";
@@ -80,35 +193,78 @@ export interface Backend {
     deleteAccount(): Promise<void>;
     onChange(cb: () => void): () => void;
   };
-  me: { getProfile(): Promise<Profile | null>; updateProfile(input: { fullName: string; phone: string }): Promise<Profile> };
+  me: {
+    getProfile(): Promise<Profile | null>;
+    updateProfile(input: { fullName: string; phone: string }): Promise<Profile>;
+  };
   groups: {
-    listActive(): Promise<Group[]>; get(id: string): Promise<Group | null>;
-    listMine(): Promise<(Group & { joinedAt: string })[]>; listLed(): Promise<(Group & { memberCount: number })[]>;
-    upsert(input: GroupInput): Promise<Group>; assignLeader(groupId: string, userId: string | null): Promise<void>;
+    listActive(): Promise<Group[]>;
+    get(id: string): Promise<Group | null>;
+    listMine(): Promise<(Group & { joinedAt: string })[]>;
+    listLed(): Promise<(Group & { memberCount: number })[]>;
+    upsert(input: GroupInput): Promise<Group>;
+    assignLeader(groupId: string, userId: string | null): Promise<void>;
   };
   requests: {
-    mine(): Promise<Record<string, RequestStatus>>; requestJoin(groupId: string, message: string): Promise<void>;
-    pendingForLeader(): Promise<PendingRequest[]>; decide(requestId: string, approve: boolean): Promise<void>;
+    mine(): Promise<Record<string, RequestStatus>>;
+    requestJoin(groupId: string, message: string): Promise<void>;
+    pendingForLeader(): Promise<PendingRequest[]>;
+    decide(requestId: string, approve: boolean): Promise<void>;
   };
-  members: { list(groupId: string): Promise<Member[]>; remove(membershipId: string): Promise<void> };
+  members: {
+    list(groupId: string): Promise<Member[]>;
+    remove(membershipId: string): Promise<void>;
+  };
   sessions: {
-    list(groupId: string): Promise<Session[]>; ensure(groupId: string, date: string, topic: string): Promise<Session>;
+    list(groupId: string): Promise<Session[]>;
+    ensure(groupId: string, date: string, topic: string): Promise<Session>;
     attendance(sessionId: string): Promise<Record<string, AttendanceStatus>>;
     save(sessionId: string, marks: { userId: string; status: AttendanceStatus }[]): Promise<void>;
     myAttendance(groupId: string): Promise<MySessionAttendance[]>;
   };
-  announcements: { list(groupId: string): Promise<Announcement[]>; feed(): Promise<Announcement[]>; create(groupId: string, title: string, body: string): Promise<Announcement>; delete(id: string): Promise<void> };
-  documents: { list(groupId: string): Promise<Document[]>; upload(input: UploadInput): Promise<Document>; url(doc: Document): Promise<string>; delete(doc: Document): Promise<void> };
-  stats: { groupSessions(groupId: string): Promise<SessionStats[]>; groupMembers(groupId: string): Promise<MemberStats[]>; allGroups(): Promise<GroupStats[]>; overview(): Promise<Overview> };
-  people: { list(search: string): Promise<Profile[]>; setRole(userId: string, role: Role): Promise<void> };
-  demo?: { reset(): Promise<void>; accounts: { email: string; role: Role; label: { es: string; en: string } }[] };
+  announcements: {
+    list(groupId: string): Promise<Announcement[]>;
+    feed(): Promise<Announcement[]>;
+    create(groupId: string, title: string, body: string): Promise<Announcement>;
+    delete(id: string): Promise<void>;
+  };
+  documents: {
+    list(groupId: string): Promise<Document[]>;
+    upload(input: UploadInput): Promise<Document>;
+    url(doc: Document): Promise<string>;
+    delete(doc: Document): Promise<void>;
+  };
+  stats: {
+    groupSessions(groupId: string): Promise<SessionStats[]>;
+    groupMembers(groupId: string): Promise<MemberStats[]>;
+    allGroups(): Promise<GroupStats[]>;
+    overview(): Promise<Overview>;
+  };
+  people: {
+    list(search: string): Promise<Profile[]>;
+    setRole(userId: string, role: Role): Promise<void>;
+  };
+  demo?: {
+    reset(): Promise<void>;
+    accounts: { email: string; role: Role; label: { es: string; en: string } }[];
+  };
 }
 ```
 
 `errors.ts`:
+
 ```ts
-export type BackendErrorCode = "not_allowed" | "not_found" | "not_signed_in" | "confirm_required" | "invalid";
-export class BackendError extends Error { constructor(public code: BackendErrorCode, message?: string) { super(message ?? code); this.name = "BackendError"; } }
+export type BackendErrorCode =
+  "not_allowed" | "not_found" | "not_signed_in" | "confirm_required" | "invalid";
+export class BackendError extends Error {
+  constructor(
+    public code: BackendErrorCode,
+    message?: string,
+  ) {
+    super(message ?? code);
+    this.name = "BackendError";
+  }
+}
 ```
 
 - [ ] Step 1: Write both files exactly as above. Step 2: `npx tsc --noEmit` clean. Step 3: commit `git commit -m "Add Backend interface and row types"`.
@@ -118,10 +274,12 @@ export class BackendError extends Error { constructor(public code: BackendErrorC
 ### Task 2: Demo backend (TDD)
 
 **Files:**
+
 - Create: `src/lib/backend/demo/seed.ts`, `store.ts`, `index.ts`
 - Test: `__tests__/demo-backend.test.ts`
 
 **Interfaces:**
+
 - Consumes: Task 1 types.
 - Produces: `createDemoBackend(opts?: { storage?: { get(): Promise<string|null>; set(v: string): Promise<void> } }): Backend` (storage defaults to AsyncStorage under `vine-demo-v1`; tests pass an in-memory storage). `DEMO_ACCOUNTS`.
 
@@ -130,6 +288,7 @@ export class BackendError extends Error { constructor(public code: BackendErrorC
 **Document shape** (`store.ts`): `{ version: 1; currentUserId: string | null; profiles; groups; requests; memberships; sessions; attendance; announcements; documents; passwords: Record<string,string> }` with arrays of the Task 1 row types (Group without `leader`). `load()` returns the parsed doc or the seed; `save(doc)` stringifies.
 
 **Rules** enforced in `index.ts` (throw `BackendError("not_allowed")`):
+
 - `requests.decide`: caller must be leader of the request's group or super_admin.
 - `groups.upsert`, `groups.assignLeader`, `people.setRole`, `stats.overview`, `stats.allGroups`, `people.list`: super_admin only (`people.list` also allowed for leaders? no — super_admin only; leaders get member profiles through `members.list`).
 - `sessions.ensure/save`, `announcements.create/delete`, `documents.upload/delete`, `members.remove`, `stats.groupSessions/groupMembers`: leader of that group or super_admin.
@@ -145,8 +304,20 @@ export class BackendError extends Error { constructor(public code: BackendErrorC
 
 ```ts
 import { createDemoBackend } from "@/lib/backend/demo";
-function mem() { let v: string | null = null; return { get: async () => v, set: async (s: string) => { v = s; } }; }
-async function backendAs(email: string) { const b = createDemoBackend({ storage: mem() }); await b.auth.signIn(email, "x"); return b; }
+function mem() {
+  let v: string | null = null;
+  return {
+    get: async () => v,
+    set: async (s: string) => {
+      v = s;
+    },
+  };
+}
+async function backendAs(email: string) {
+  const b = createDemoBackend({ storage: mem() });
+  await b.auth.signIn(email, "x");
+  return b;
+}
 
 test("member browses active groups and requests to join", async () => {
   const b = await backendAs("member@demo");
@@ -197,6 +368,7 @@ test("state persists through storage", async () => {
   expect((await b.requests.mine())["g-centro"]).toBe("pending");
 });
 ```
+
 Run `npx jest demo-backend` → FAIL (module missing).
 
 - [ ] **Step 2: Implement** `seed.ts`, `store.ts`, `index.ts` per the rules above. Ids for new rows: `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`. Every mutating method ends with `await save(doc)`. Every read method starts with `const doc = await load()`.
@@ -208,24 +380,40 @@ Run `npx jest demo-backend` → FAIL (module missing).
 ### Task 3: Backend selector and query hooks rewired to the interface
 
 **Files:**
+
 - Create: `src/lib/backend/index.ts`, `src/lib/backend/amplify/index.ts` (stub that throws `BackendError("invalid", "Amplify backend not configured")` from every method, replaced in Task 5)
 - Modify: every file in `src/lib/queries/`, `src/contexts/AuthContext.tsx`
 
 **Interfaces:**
+
 - Produces: `backend: Backend`, `backendMode`, `isDemo`. Hooks keep their names; `useAuth()` keeps `{ session, user, profile, role, leadsAnyGroup, loading, signIn, signUp, signOut, refreshProfile }` and adds `confirmSignUp(email, code)`. `session` becomes `AuthUser | null`; `user` the same object.
 
 - [ ] Step 1: `index.ts`:
+
 ```ts
 import { createDemoBackend } from "./demo";
 import { createAmplifyBackend } from "./amplify";
 let outputs: unknown = null;
-try { outputs = require("../../../amplify_outputs.json"); } catch { outputs = null; }
+try {
+  outputs = require("../../../amplify_outputs.json");
+} catch {
+  outputs = null;
+}
 const requested = process.env.EXPO_PUBLIC_BACKEND;
-export const backendMode: "demo" | "amplify" = requested === "demo" ? "demo" : requested === "amplify" ? "amplify" : outputs ? "amplify" : "demo";
+export const backendMode: "demo" | "amplify" =
+  requested === "demo"
+    ? "demo"
+    : requested === "amplify"
+      ? "amplify"
+      : outputs
+        ? "amplify"
+        : "demo";
 export const isDemo = backendMode === "demo";
 export const backend = backendMode === "demo" ? createDemoBackend() : createAmplifyBackend(outputs);
 ```
+
 (Metro resolves the `require` at bundle time; when the file is absent the try/catch must be around a `require` of a literal path, and a `amplify_outputs.json` placeholder is NOT committed. Add `amplify_outputs.json` to `.gitignore`.)
+
 - [ ] Step 2: Rewrite hooks: each `queryFn` becomes a one-line call, e.g. `useActiveGroups → backend.groups.listActive()`, `useMyGroups(uid) → backend.groups.listMine()` (uid only gates `enabled`), `useRequestJoin → backend.requests.requestJoin(groupId, message)`, `useUploadDocument(groupId) → backend.documents.upload({ groupId, ...input })`, `useOpenDocument → WebBrowser.openBrowserAsync(await backend.documents.url(doc))` — for demo `demo://` paths show an Alert "Demo document" instead of opening. Keep invalidation keys. Field names change to camelCase (`fullName`, `meetingDay`, `sessionDate`, `joinedAt`, `createdAt`, `storagePath`, `sizeBytes`, `isActive`, `leaderId`, `userId`, `groupId`, `avgRate`, `lastSession`, `leaderName`); update every screen and component that reads a row field (GroupCard `meeting_day → meetingDay`, etc.).
 - [ ] Step 3: `AuthContext`: on mount `backend.auth.currentUser()`, then `backend.me.getProfile()` and `backend.groups.listLed()`; subscribe with `backend.auth.onChange`. `signIn/signUp/confirmSignUp/signOut` delegate.
 - [ ] Step 4: `npx tsc --noEmit` clean; `npx jest` passes. Simulator: `EXPO_PUBLIC_BACKEND=demo` in `.env`; sign in as `member@demo` and walk Home, Groups, group portal. Commit `"Route all data access through the Backend interface"`.
@@ -235,6 +423,7 @@ export const backend = backendMode === "demo" ? createDemoBackend() : createAmpl
 ### Task 4: Demo entry points and confirmation screen
 
 **Files:**
+
 - Create: `app/(public)/confirm.tsx`, `src/components/DemoBadge.tsx`
 - Modify: `app/(public)/welcome.tsx`, `app/(public)/sign-up.tsx`, `app/(app)/profile.tsx`, `app/_layout.tsx`, `src/lib/i18n` (nothing), `.env.example`
 
@@ -249,23 +438,29 @@ export const backend = backendMode === "demo" ? createDemoBackend() : createAmpl
 ### Task 5: Amplify backend definition
 
 **Files:**
+
 - Create: `amplify/backend.ts`, `amplify/auth/resource.ts`, `amplify/data/resource.ts`, `amplify/storage/resource.ts`, `amplify/functions/shared/client.ts`, `amplify/functions/shared/authz.ts`, and for each of `post-confirmation`, `request-join`, `decide-request`, `assign-leader`, `set-role`, `save-attendance`, `group-portal`, `document-url`, `upload-url`, `group-report`, `admin-overview`, `delete-my-account`, `feed`: `amplify/functions/<name>/resource.ts` and `handler.ts`
 - Modify: `package.json` (deps), `tsconfig.json` (exclude `amplify/**` from the app typecheck; amplify has its own `amplify/tsconfig.json`), `.gitignore` (`.amplify/`, `amplify_outputs.json`)
 
 **Deps:** `npm i aws-amplify @aws-amplify/react-native react-native-get-random-values react-native-url-polyfill` and `npm i -D @aws-amplify/backend @aws-amplify/backend-cli aws-cdk-lib constructs esbuild tsx @aws-sdk/client-cognito-identity-provider @aws-sdk/client-s3 @aws-sdk/s3-request-presigner`.
 
 - [ ] Step 1: `auth/resource.ts`:
+
 ```ts
 import { defineAuth } from "@aws-amplify/backend";
 import { postConfirmation } from "../functions/post-confirmation/resource";
 export const auth = defineAuth({
   loginWith: { email: true },
-  userAttributes: { fullname: { required: true, mutable: true }, phoneNumber: { required: true, mutable: true } },
+  userAttributes: {
+    fullname: { required: true, mutable: true },
+    phoneNumber: { required: true, mutable: true },
+  },
   groups: ["LEADERS", "ADMINS"],
   triggers: { postConfirmation },
   access: (allow) => [allow.resource(postConfirmation).to(["addUserToGroup"])],
 });
 ```
+
 - [ ] Step 2: `data/resource.ts`: models from the spec table with `a.model({...}).secondaryIndexes(...)` and `.authorization((allow) => [...])`; custom operations as `a.mutation()/a.query()` with `.arguments({...})`, `.returns(a.json())` (or typed `a.ref`), `.authorization((allow) => [allow.authenticated()])`, `.handler(a.handler.function(fn))`. Schema authorization grants each function access: `schema.authorization((allow) => [allow.resource(fn1), ...])`. Default auth mode `userPool`, API key enabled (30 days expiry) for public reads.
 - [ ] Step 3: `storage/resource.ts`: `defineStorage({ name: "lg-documents", access: (allow) => ({ "groups/*": [allow.resource(documentUrl).to(["read"]), allow.resource(uploadUrl).to(["write"]), allow.resource(deleteDocument?).to(["delete"])] }) })` — deletes happen inside `documentUrl`'s sibling? No: add a 14th function `delete-document` (leader/ADMINS) that removes the S3 object and the row.
 - [ ] Step 4: `functions/shared/client.ts`: `getDataClient()` using `Amplify.configure(getAmplifyDataClientConfig(env))` + `generateClient<Schema>()` with IAM auth, per the Amplify Gen 2 "data from function" docs. `authz.ts`: `callerId(event)`, `callerGroups(event)`, `isAdmin`, `assertLeaderOf(groupId)` (fetches Group, compares `leaderId`), `assertMemberOf(groupId)`.
@@ -278,6 +473,7 @@ export const auth = defineAuth({
 ### Task 6: Amplify client backend and Supabase removal
 
 **Files:**
+
 - Modify: `src/lib/backend/amplify/index.ts` (real implementation), `app/_layout.tsx` (polyfills + `Amplify.configure(outputs)` when in amplify mode), `package.json`
 - Delete: `src/integrations/supabase/*`, `@supabase/supabase-js`
 
