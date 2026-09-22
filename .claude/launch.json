@@ -19,9 +19,18 @@
       "runtimeExecutable": "sh",
       "runtimeArgs": [
         "-c",
-        "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && npx expo start --port 8082 --ios"
+        "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app && npx expo start --port 8083 --ios --clear"
       ],
-      "port": 8082
+      "port": 8083
+    },
+    {
+      "name": "api",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd /Users/lezdev/Desktop/Williams/vine-life-groups-app/api && npx wrangler dev --port 8787"
+      ],
+      "port": 8787
     }
   ]
 }
